@@ -1,0 +1,22 @@
+{
+    "name": "sensiolabs/security-checker",
+    "description": "A security checker for your composer.lock",
+    "authors": [
+        {
+            "name": "Fabien Potencier",
+            "email": "fabien.potencier@gmail.com"
+        }
+    ],
+    "require": {
+        "symfony/console": "~2.0"
+    },
+    "bin": ["checker"],
+    "autoload": {
+        "psr-0": { "SensioLabs\\Security": "" }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
+    }
+}
