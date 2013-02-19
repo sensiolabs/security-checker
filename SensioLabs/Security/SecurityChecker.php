@@ -28,6 +28,8 @@ class SecurityChecker
 
         if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
             $lock = $lock.'/composer.lock';
+        } elseif (preg_match('/composer.json$/', $lock)) {
+            $lock = str_replace('composer.json', 'composer.lock', $lock);
         }
 
         if (!is_file($lock)) {
@@ -67,7 +69,7 @@ class SecurityChecker
 
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if (400 == $statusCode) {
-            throw new \InvalidArgumentException(sprintf('The web service failed with the following error: %s.', $data['error']));
+            throw new \InvalidArgumentException(sprintf('The web service failed with the following error: %s.', isset($data['error']) ? $data['error'] : ''));
         }
 
         if (200 != $statusCode) {
