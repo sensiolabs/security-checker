@@ -11,7 +11,7 @@
     "require": {
         "symfony/console": "~2.0"
     },
-    "bin": ["checker"],
+    "bin": ["security-checker"],
     "autoload": {
         "psr-0": { "SensioLabs\\Security": "" }
     },

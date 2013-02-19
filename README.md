@@ -6,7 +6,7 @@ application use dependencies with known security vulnerabilities. It uses the
 [SensioLabs Security Check Web service][1] and the [Security Advisories Database][2]
 behind the scene:
 
-    $ php checker security:check /path/to/composer.lock
+    $ php security-checker security:check /path/to/composer.lock
 
 You can also integrate the checker in your own application/project
 
