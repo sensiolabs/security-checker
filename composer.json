@@ -1,6 +1,7 @@
 {
     "name": "sensiolabs/security-checker",
     "description": "A security checker for your composer.lock",
+    "license": "MIT",
     "authors": [
         {
             "name": "Fabien Potencier",
