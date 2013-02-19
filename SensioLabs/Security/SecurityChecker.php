@@ -64,7 +64,7 @@ class SecurityChecker
             $error = curl_error($curl);
             curl_close($curl);
 
-            throw new \RuntimeException(sprintf('An error occured: %s.', $error));
+            throw new \RuntimeException(sprintf('An error occurred: %s.', $error));
         }
 
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
