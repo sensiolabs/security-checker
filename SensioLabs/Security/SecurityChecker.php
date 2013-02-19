@@ -66,7 +66,7 @@ class SecurityChecker
         }
 
         if (400 == curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
-            throw new \InvalidArgumentException(sprintf('The web service failed with the following error: %s.', $data['error']));
+            throw new \InvalidArgumentException(sprintf('The web service failed with the following error: "%s".', isset($data['error']) ? $data['error'] : ''));
         }
 
         if (200 != curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
