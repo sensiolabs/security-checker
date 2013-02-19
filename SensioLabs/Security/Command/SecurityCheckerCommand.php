@@ -28,7 +28,7 @@ class SecurityCheckerCommand extends Command
         $this
             ->setName('security:check')
             ->setDefinition(array(
-                new InputArgument('lock', InputArgument::REQUIRED, 'The path to the composer.lock file'),
+                new InputArgument('lock', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
             ))
             ->setDescription('Checks security issues in your project dependencies')
