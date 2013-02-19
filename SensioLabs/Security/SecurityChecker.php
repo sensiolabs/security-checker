@@ -65,12 +65,13 @@ class SecurityChecker
             throw new \RuntimeException(sprintf('An error occured: %s.', $error));
         }
 
-        if (400 == curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
+        $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if (400 == $statusCode) {
             throw new \InvalidArgumentException(sprintf('The web service failed with the following error: %s.', $data['error']));
         }
 
-        if (200 != curl_getinfo($curl, CURLINFO_HTTP_CODE)) {
-            throw new \RuntimeException('The web service failed for an unknown reason.');
+        if (200 != $statusCode) {
+            throw new \RuntimeException('The web service failed for an unknown reason (HTTP '.$statusCode.').');
         }
 
         curl_close($curl);
