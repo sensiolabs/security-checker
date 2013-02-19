@@ -38,10 +38,10 @@ class SecurityChecker
 
         switch ($format) {
             case 'text':
-                $format = 'text/plain';
+                $accept = 'text/plain';
                 break;
             case 'json':
-                $format = 'application/json';
+                $accept = 'application/json';
                 break;
             default:
                 throw new \InvalidArgumentException(sprintf('Unsupported format "%s".', $format));
@@ -50,7 +50,7 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, false);
         curl_setopt($curl, CURLOPT_URL, 'https://security.sensiolabs.org/check_lock');
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$format));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$accept));
         curl_setopt($curl, CURLOPT_POSTFIELDS, array('lock' => '@'.$lock));
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
@@ -69,7 +69,14 @@ class SecurityChecker
 
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if (400 == $statusCode) {
-            throw new \InvalidArgumentException(sprintf('The web service failed with the following error: %s.', isset($data['error']) ? $data['error'] : ''));
+            if ('text' == $format) {
+                $error = trim($data);
+            } else {
+                $data = json_decode($data, true);
+                $error = $data['error'];
+            }
+
+            throw new \InvalidArgumentException($error);
         }
 
         if (200 != $statusCode) {
