@@ -13,7 +13,12 @@ You can also integrate the checker in your own application/project
  * by using the `SecurityCheckerCommand` class into your Symfony Console
    application.
 
- * by using the `SecurityChecker` class directly into your own code.
+ * by using the `SecurityChecker` class directly into your own code:
+
+        use SensioLabs\Security\SecurityChecker;
+
+        $checker = new SecurityChecker();
+        $alerts = $checker->check('/path/to/composer.lock', 'json');
 
 [1]: http://security.sensiolabs.org/
 [2]: https://github.com/sensiolabs/security-advisories
