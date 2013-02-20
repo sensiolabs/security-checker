@@ -77,11 +77,13 @@ class SecurityChecker
             }
 
             curl_close($curl);
+
             throw new \InvalidArgumentException($error);
         }
 
         if (200 != $statusCode) {
             curl_close($curl);
+
             throw new \RuntimeException('The web service failed for an unknown reason (HTTP '.$statusCode.').');
         }
 
