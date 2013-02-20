@@ -28,7 +28,7 @@ class SecurityChecker
 
         if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
             $lock = $lock.'/composer.lock';
-        } elseif (preg_match('/composer.json$/', $lock)) {
+        } elseif (preg_match('/composer\.json$/', $lock)) {
             $lock = str_replace('composer.json', 'composer.lock', $lock);
         }
 
