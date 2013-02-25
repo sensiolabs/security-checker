@@ -36,12 +36,12 @@ class SecurityCheckerCommand extends Command
 The <info>%command.name%</info> command checks a <info>composer.lock</info>
 file for security issues in the project dependencies:
 
-<info>php %command.full_name% security:check /path/to/composer.lock</info>
+<info>php %command.full_name% /path/to/composer.lock</info>
 
 By default, the command displays the result in plain text, but you can also
 configure it to output JSON instead by using the <info>--format</info> option:
 
-<info>php %command.full_name% security:check /path/to/composer.lock --format=json</info>
+<info>php %command.full_name% /path/to/composer.lock --format=json</info>
 EOF
             );
     }
