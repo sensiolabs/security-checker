@@ -13,6 +13,8 @@ namespace SensioLabs\Security;
 
 class SecurityChecker
 {
+    private $vulnerabilitiesCount;
+
     /**
      * Checks a composer.lock file.
      *
@@ -109,11 +111,13 @@ class SecurityChecker
             throw new \RuntimeException('The web service did not return alerts count');
         }
 
-        $vulnerabilitiesCount = intval($matches[1]);
-        if ($vulnerabilitiesCount > 0) {
-            throw new SecurityException($body, $vulnerabilitiesCount);
-        }
+        $this->vulnerabilitiesCount = intval($matches[1]);
 
         return $body;
+    }
+
+    public function getLastVulnerabilityCount()
+    {
+        return $this->vulnerabilitiesCount;
     }
 }
