@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Command;
 
 use SensioLabs\Security\SecurityChecker;
+use SensioLabs\Security\SecurityException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -63,6 +64,10 @@ EOF
     {
         try {
             $data = $this->checker->check($input->getArgument('lock'), $input->getOption('format'));
+        } catch (SecurityException $e) {
+            $output->write($e->getMessage());
+
+            return 1;
         } catch (\Exception $e) {
             $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($e->getMessage(), 'error', true));
 
