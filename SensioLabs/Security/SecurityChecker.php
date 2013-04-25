@@ -57,7 +57,7 @@ class SecurityChecker
         }
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_URL, 'https://security.sensiolabs.org/check_lock');
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$accept));
         curl_setopt($curl, CURLOPT_POSTFIELDS, array('lock' => '@'.$lock));
@@ -70,21 +70,25 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
         curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . "/Resources/security.sensiolabs.org.crt");
 
-        $data = curl_exec($curl);
+        $response = curl_exec($curl);
 
-        if (false === $data) {
+        if (false === $response) {
             $error = curl_error($curl);
             curl_close($curl);
 
             throw new \RuntimeException(sprintf('An error occurred: %s.', $error));
         }
 
+        $headersSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $headers = substr($response, 0, $headersSize);
+        $body = substr($response, $headersSize);
+
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if (400 == $statusCode) {
             if ('text' == $format) {
-                $error = trim($data);
+                $error = trim($body);
             } else {
-                $data = json_decode($data, true);
+                $data = json_decode($body, true);
                 $error = $data['error'];
             }
 
@@ -101,6 +105,15 @@ class SecurityChecker
 
         curl_close($curl);
 
-        return $data;
+        if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
+            throw new \RuntimeException('The web service did not return alerts count');
+        }
+
+        $vulnerabilitiesCount = intval($matches[1]);
+        if ($vulnerabilitiesCount > 0) {
+            throw new SecurityException($body, $vulnerabilitiesCount);
+        }
+
+        return $body;
     }
 }
