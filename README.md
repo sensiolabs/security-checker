@@ -20,5 +20,13 @@ You can also integrate the checker in your own application/project
         $checker = new SecurityChecker();
         $alerts = $checker->check('/path/to/composer.lock', 'json');
 
+Create Phar File
+---------------------
+
+To create a phar file you can use [Box][3]
+
+    $ php box.phar build
+
 [1]: http://security.sensiolabs.org/
 [2]: https://github.com/sensiolabs/security-advisories
+[3]: http://box-project.org/

@@ -1,0 +1,24 @@
+{
+    "directories": ["vendor","SensioLabs"],
+    "main": "security-checker",
+    "output": "security-checker.phar",
+    "files": [
+        "LICENSE",
+        "README.md",
+        "SensioLabs/Security/Resources/security.sensiolabs.org.crt",
+        "SensioLabs/Security/Resources/security.sensiolabs.org.crt.sha"
+    ],
+    "finder": [
+        {
+            "name": "*.*",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        },
+        {
+            "name": "*.*",
+            "exclude": ["Tests"],
+            "in": "SensioLabs"
+        }
+    ],
+    "stub": true
+}
