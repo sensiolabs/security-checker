@@ -129,6 +129,8 @@ class SecurityChecker
 
     /**
     * Copy the cacert.pem file from the phar if it is not in the temp folder and validate the Sha1 checksum
+    * required because curl can't read from a phar stream wrapper
+    * method taken from guzzle https://github.com/guzzle/guzzle/blob/v3.7.2/src/Guzzle/Http/Client.php#L336
     *
     * @param bool $sha1Check Set to false to not perform the Sha1 validation
     *
