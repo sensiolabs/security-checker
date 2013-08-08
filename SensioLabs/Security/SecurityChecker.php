@@ -58,6 +58,12 @@ class SecurityChecker
                 throw new \InvalidArgumentException(sprintf('Unsupported format "%s".', $format));
         }
 
+         if (strpos(__FILE__, 'phar://') !== false) {
+            $certFile = $this->preparePharCacert();
+        } else {
+            $certFile = __DIR__ . "/Resources/security.sensiolabs.org.crt";
+        }
+
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_URL, 'https://security.sensiolabs.org/check_lock');
@@ -70,7 +76,7 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . "/Resources/security.sensiolabs.org.crt");
+        curl_setopt($curl, CURLOPT_CAINFO, $certFile);
 
         $response = curl_exec($curl);
 
@@ -119,5 +125,31 @@ class SecurityChecker
     public function getLastVulnerabilityCount()
     {
         return $this->vulnerabilitiesCount;
+    }
+
+    /**
+    * Copy the cacert.pem file from the phar if it is not in the temp folder and validate the Sha1 checksum
+    *
+    * @param bool $sha1Check Set to false to not perform the Sha1 validation
+    *
+    * @return string Returns the path to the extracted cacert
+    * @throws RuntimeException if the file cannot be copied or there is a Sha1 mismatch
+    */
+    public function preparePharCacert($sha1Check = true)
+    {
+        $from = __DIR__ . '/Resources/security.sensiolabs.org.crt';
+        $certFile = sys_get_temp_dir() . '/sensio-security-checker-cacert.pem';
+        if (!file_exists($certFile) && !copy($from, $certFile)) {
+            throw new \RuntimeException("Could not copy {$from} to {$certFile}: " . var_export(error_get_last(), true));
+        } elseif ($sha1Check) {
+            $actualSha1 = sha1_file($certFile);
+            $expectedSha1 = explode(' ', trim(file_get_contents("{$from}.sha")));
+            $expectedSha1 = array_shift($expectedSha1);
+            if ($actualSha1 != $expectedSha1) {
+                throw new \RuntimeException("{$certFile} Sha1 mismatch: expected {$expectedSha1} but got {$actualSha1}");
+            }
+        }
+
+        return $certFile;
     }
 }
