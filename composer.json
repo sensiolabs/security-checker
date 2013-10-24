@@ -9,6 +9,7 @@
         }
     ],
     "require": {
+        "ext-curl": "*",
         "symfony/console": "~2.0"
     },
     "bin": ["security-checker"],
