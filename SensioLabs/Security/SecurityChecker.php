@@ -76,7 +76,12 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
-        curl_setopt($curl, CURLOPT_CAINFO, __DIR__ . "/Resources/security.sensiolabs.org.crt");
+
+        $cert = __DIR__.'/Resources/security.sensiolabs.org.crt';
+        if ('phar://' == substr(__FILE__, 0, 7)) {
+            copy($cert, $cert = '/tmp/security.sensiolabs.org.crt');
+        }
+        curl_setopt($curl, CURLOPT_CAINFO, $cert);
 
         $response = curl_exec($curl);
 
