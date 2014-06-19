@@ -127,7 +127,7 @@ class SecurityChecker
                 unlink($tmpFile);
             }
 
-            throw new \RuntimeException('The web service failed for an unknown reason (HTTP '.$statusCode.').');
+            throw new \RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
         }
 
         curl_close($curl);
@@ -136,7 +136,7 @@ class SecurityChecker
         }
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
-            throw new \RuntimeException('The web service did not return alerts count');
+            throw new \RuntimeException('The web service did not return alerts count.');
         }
 
         $this->vulnerabilitiesCount = intval($matches[1]);
