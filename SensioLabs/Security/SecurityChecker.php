@@ -26,6 +26,7 @@ class SecurityChecker
      * @throws \InvalidArgumentException When the output format is unsupported
      * @throws \RuntimeException         When the lock file does not exist
      * @throws \RuntimeException         When curl does not work or is unavailable
+     * @throws \RuntimeException         When the certificate can not be copied
      */
     public function check($lock, $format = 'text')
     {
@@ -78,8 +79,12 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
 
         $cert = __DIR__.'/Resources/security.sensiolabs.org.crt';
-        if ('phar://' == substr(__FILE__, 0, 7)) {
-            copy($cert, $cert = '/tmp/security.sensiolabs.org.crt');
+        $tmpFile = null;
+        if ('phar://' === substr(__FILE__, 0, 7)) {
+            $tmpFile = tempnam(sys_get_temp_dir(), 'sls');
+            if (false === @copy($cert, $cert = $tmpFile)) {
+                throw new \RuntimeException(sprintf('Unable to copy the certificate in "%s".', $tmpFile));
+            }
         }
         curl_setopt($curl, CURLOPT_CAINFO, $cert);
 
@@ -88,6 +93,9 @@ class SecurityChecker
         if (false === $response) {
             $error = curl_error($curl);
             curl_close($curl);
+            if ($tmpFile) {
+                unlink($tmpFile);
+            }
 
             throw new \RuntimeException(sprintf('An error occurred: %s.', $error));
         }
@@ -106,17 +114,26 @@ class SecurityChecker
             }
 
             curl_close($curl);
+            if ($tmpFile) {
+                unlink($tmpFile);
+            }
 
             throw new \InvalidArgumentException($error);
         }
 
         if (200 != $statusCode) {
             curl_close($curl);
+            if ($tmpFile) {
+                unlink($tmpFile);
+            }
 
             throw new \RuntimeException('The web service failed for an unknown reason (HTTP '.$statusCode.').');
         }
 
         curl_close($curl);
+        if ($tmpFile) {
+            unlink($tmpFile);
+        }
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
             throw new \RuntimeException('The web service did not return alerts count');
