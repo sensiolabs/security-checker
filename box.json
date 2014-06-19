@@ -1,0 +1,25 @@
+{
+    "output": "security-checker.phar",
+    "chmod": "0755",
+    "compactors": [
+        "Herrera\\Box\\Compactor\\Php"
+    ],
+    "extract": false,
+    "main": "security-checker",
+    "files": [
+        "LICENSE"
+    ],
+    "finder": [
+        {
+            "name": "*.*",
+            "exclude": ["Tests"],
+            "in": "vendor"
+        },
+        {
+            "name": ["*.*", "*.crt"],
+            "in": "SensioLabs"
+        }
+    ],
+    "stub": true,
+    "web": false
+}
