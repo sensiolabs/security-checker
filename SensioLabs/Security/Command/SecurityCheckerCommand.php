@@ -39,6 +39,7 @@ class SecurityCheckerCommand extends Command
             ->setDefinition(array(
                 new InputArgument('lock', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
+                new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
             ))
             ->setDescription('Checks security issues in your project dependencies')
             ->setHelp(<<<EOF
@@ -61,6 +62,10 @@ EOF
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        if ($endPoint = $input->getOption('end-point')) {
+            $this->checker->setEndPoint($endPoint);
+        }
+
         try {
             $data = $this->checker->check($input->getArgument('lock'), $input->getOption('format'));
         } catch (\Exception $e) {

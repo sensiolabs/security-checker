@@ -13,7 +13,13 @@ namespace SensioLabs\Security;
 
 class SecurityChecker
 {
+    private $endPoint = 'https://security.sensiolabs.org/check_lock';
     private $vulnerabilitiesCount;
+
+    public function setEndPoint($endPoint)
+    {
+        $this->endPoint = $endPoint;
+    }
 
     /**
      * Checks a composer.lock file.
@@ -67,7 +73,7 @@ class SecurityChecker
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
-        curl_setopt($curl, CURLOPT_URL, 'https://security.sensiolabs.org/check_lock');
+        curl_setopt($curl, CURLOPT_URL, $this->endPoint);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$accept));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
