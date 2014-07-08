@@ -76,7 +76,7 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_URL, $this->endPoint);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$accept));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
-        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 0);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, 1);
         curl_setopt($curl, CURLOPT_MAXREDIRS, 3);
