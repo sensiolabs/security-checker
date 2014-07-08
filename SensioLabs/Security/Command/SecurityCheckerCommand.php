@@ -40,6 +40,7 @@ class SecurityCheckerCommand extends Command
                 new InputArgument('lock', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
+                new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout'),
             ))
             ->setDescription('Checks security issues in your project dependencies')
             ->setHelp(<<<EOF
@@ -64,6 +65,10 @@ EOF
     {
         if ($endPoint = $input->getOption('end-point')) {
             $this->checker->setEndPoint($endPoint);
+        }
+
+        if ($timeout = $input->getOption('timeout')) {
+            $this->checker->setTimeout($timeout);
         }
 
         try {
