@@ -11,6 +11,8 @@
 
 namespace SensioLabs\Security;
 
+use SensioLabs\Security\Exception\RuntimeException;
+
 class SecurityChecker
 {
     private $endPoint = 'https://security.sensiolabs.org/check_lock';
@@ -30,24 +32,22 @@ class SecurityChecker
     /**
      * Checks a composer.lock file.
      *
-     * @param string $lock   The path to the composer.lock file
-     * @param string $format The return format
+     * @param string $lock The path to the composer.lock file
      *
-     * @return mixed The vulnerabilities
+     * @return array An array of vulnerabilities
      *
-     * @throws \InvalidArgumentException When the output format is unsupported
-     * @throws \RuntimeException         When the lock file does not exist
-     * @throws \RuntimeException         When curl does not work or is unavailable
-     * @throws \RuntimeException         When the certificate can not be copied
+     * @throws RuntimeException When the lock file does not exist
+     * @throws RuntimeException When curl does not work or is unavailable
+     * @throws RuntimeException When the certificate can not be copied
      */
-    public function check($lock, $format = 'text')
+    public function check($lock)
     {
         if (!function_exists('curl_init')) {
-            throw new \RuntimeException('Curl is required to use this command.');
+            throw new RuntimeException('Curl is required to use this command.');
         }
 
         if (false === $curl = curl_init()) {
-            throw new \RuntimeException('Unable to create a new curl handle.');
+            throw new RuntimeException('Unable to create a new curl handle.');
         }
 
         if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
@@ -57,18 +57,7 @@ class SecurityChecker
         }
 
         if (!is_file($lock)) {
-            throw new \RuntimeException('Lock file does not exist.');
-        }
-
-        switch ($format) {
-            case 'text':
-                $accept = 'text/plain';
-                break;
-            case 'json':
-                $accept = 'application/json';
-                break;
-            default:
-                throw new \InvalidArgumentException(sprintf('Unsupported format "%s".', $format));
+            throw new RuntimeException('Lock file does not exist.');
         }
 
         $postFields = array('lock' => '@'.$lock);
@@ -80,7 +69,7 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_URL, $this->endPoint);
-        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: '.$accept));
+        curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
         curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
@@ -95,7 +84,7 @@ class SecurityChecker
         if ('phar://' === substr(__FILE__, 0, 7)) {
             $tmpFile = tempnam(sys_get_temp_dir(), 'sls');
             if (false === @copy($cert, $cert = $tmpFile)) {
-                throw new \RuntimeException(sprintf('Unable to copy the certificate in "%s".', $tmpFile));
+                throw new RuntimeException(sprintf('Unable to copy the certificate in "%s".', $tmpFile));
             }
         }
         curl_setopt($curl, CURLOPT_CAINFO, $cert);
@@ -109,7 +98,7 @@ class SecurityChecker
                 unlink($tmpFile);
             }
 
-            throw new \RuntimeException(sprintf('An error occurred: %s.', $error));
+            throw new RuntimeException(sprintf('An error occurred: %s.', $error));
         }
 
         $headersSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
@@ -118,19 +107,15 @@ class SecurityChecker
 
         $statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
         if (400 == $statusCode) {
-            if ('text' == $format) {
-                $error = trim($body);
-            } else {
-                $data = json_decode($body, true);
-                $error = $data['error'];
-            }
+            $data = json_decode($body, true);
+            $error = $data['error'];
 
             curl_close($curl);
             if ($tmpFile) {
                 unlink($tmpFile);
             }
 
-            throw new \InvalidArgumentException($error);
+            throw new RuntimeException($error);
         }
 
         if (200 != $statusCode) {
@@ -139,7 +124,7 @@ class SecurityChecker
                 unlink($tmpFile);
             }
 
-            throw new \RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
+            throw new RuntimeException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode));
         }
 
         curl_close($curl);
@@ -148,12 +133,12 @@ class SecurityChecker
         }
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
-            throw new \RuntimeException('The web service did not return alerts count.');
+            throw new RuntimeException('The web service did not return alerts count.');
         }
 
         $this->vulnerabilityCount = intval($matches[1]);
 
-        return $body;
+        return json_decode($body, true);
     }
 
     public function getLastVulnerabilityCount()
