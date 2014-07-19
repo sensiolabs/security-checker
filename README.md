@@ -31,7 +31,7 @@ the checker into your own project:
         use SensioLabs\Security\SecurityChecker;
 
         $checker = new SecurityChecker();
-        $alerts = $checker->check('/path/to/composer.lock', 'json');
+        $alerts = $checker->check('/path/to/composer.lock');
 
 [1]: http://security.sensiolabs.org/
 [2]: https://github.com/sensiolabs/security-advisories
