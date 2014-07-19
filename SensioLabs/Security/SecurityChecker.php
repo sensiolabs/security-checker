@@ -14,7 +14,7 @@ namespace SensioLabs\Security;
 class SecurityChecker
 {
     private $endPoint = 'https://security.sensiolabs.org/check_lock';
-    private $vulnerabilitiesCount;
+    private $vulnerabilityCount;
     private $timeout = 20;
 
     public function setTimeout($timeout)
@@ -151,13 +151,13 @@ class SecurityChecker
             throw new \RuntimeException('The web service did not return alerts count.');
         }
 
-        $this->vulnerabilitiesCount = intval($matches[1]);
+        $this->vulnerabilityCount = intval($matches[1]);
 
         return $body;
     }
 
     public function getLastVulnerabilityCount()
     {
-        return $this->vulnerabilitiesCount;
+        return $this->vulnerabilityCount;
     }
 }
