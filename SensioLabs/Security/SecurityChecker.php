@@ -78,6 +78,8 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        
+        
 
         $cert = __DIR__.'/Resources/security.sensiolabs.org.crt';
         $tmpFile = null;
@@ -88,7 +90,48 @@ class SecurityChecker
             }
         }
         curl_setopt($curl, CURLOPT_CAINFO, $cert);
+        
+        // Handle system proxy
+        if (!empty($_SERVER['HTTP_PROXY']) || !empty($_SERVER['http_proxy'])) {
+            // Some systems seem to rely on a lowercased version instead...
+            $proxy = parse_url(!empty($_SERVER['http_proxy']) ? $_SERVER['http_proxy'] : $_SERVER['HTTP_PROXY']);
+        }
 
+        if (!empty($proxy)) {
+            $proxyURL = isset($proxy['scheme']) ? $proxy['scheme'] . '://' : '';
+            $proxyURL .= isset($proxy['host']) ? $proxy['host'] : '';
+
+            if (isset($proxy['port'])) {
+                $proxyURL .= ":" . $proxy['port'];
+            } elseif ('http://' == substr($proxyURL, 0, 7)) {
+                $proxyURL .= ":80";
+            } elseif ('https://' == substr($proxyURL, 0, 8)) {
+                $proxyURL .= ":443";
+            }
+
+            // http(s):// is not supported in proxy
+            $proxyURL = str_replace(array('http://', 'https://'), array('tcp://', 'ssl://'), $proxyURL);
+
+            if (0 === strpos($proxyURL, 'ssl:') && !extension_loaded('openssl')) {
+                throw new \RuntimeException('You must enable the openssl extension to use a proxy over https');
+            }
+
+            // TODO: enabled request_fulluri unless it is explicitly disabled
+
+            if (isset($proxy['user'])) {
+                $auth = urldecode($proxy['user']);
+                if (isset($proxy['pass'])) {
+                    $auth .= ':' . urldecode($proxy['pass']);
+                }
+                $auth = base64_encode($auth);
+
+                // Preserve headers if already set in default options
+                curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json', "Proxy-Authorization: Basic {$auth}"));
+            }
+            
+            curl_setopt($curl, CURLOPT_PROXY, $proxyURL);
+        }
+        
         $response = curl_exec($curl);
 
         if (false === $response) {
