@@ -21,6 +21,13 @@ class TextFormatter
         $this->formatter = $formatter;
     }
 
+    /**
+     * Displays a security report as plain text.
+     *
+     * @param OutputInterface $output
+     * @param string          $lockFilePath    The file path to the checked lock file
+     * @param array           $vulnerabilities An array of vulnerabilities
+     */
     public function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
     {
         $output->writeln("\n<fg=blue>Security Check Report\n~~~~~~~~~~~~~~~~~~~~~</>\n");

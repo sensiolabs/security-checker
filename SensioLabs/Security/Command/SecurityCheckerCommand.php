@@ -94,7 +94,6 @@ EOF
             case 'text':
             default:
                 $formatter = new \SensioLabs\Security\Formatters\TextFormatter($this->getHelperSet()->get('formatter'));
-                break;
         }
 
         $formatter->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
