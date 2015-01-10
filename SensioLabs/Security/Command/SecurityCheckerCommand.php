@@ -86,7 +86,7 @@ EOF
 
         switch ($input->getOption('format')) {
             case 'json':
-                $formatter = new \SensioLabs\Security\Formatters\JsonFormatter;
+                $formatter = new \SensioLabs\Security\Formatters\JsonFormatter();
                 break;
             case 'line':
                 $formatter = new \SensioLabs\Security\Formatters\LineFormatter($this->getHelperSet()->get('formatter'));

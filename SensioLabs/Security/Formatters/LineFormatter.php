@@ -16,7 +16,6 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 
 class LineFormatter
 {
-
     public function __construct(FormatterHelper $formatter)
     {
         $this->formatter = $formatter;
@@ -59,5 +58,4 @@ class LineFormatter
             }
         }
     }
-
 }

@@ -16,7 +16,6 @@ use Symfony\Component\Console\Helper\FormatterHelper;
 
 class TextFormatter
 {
-
     public function __construct(FormatterHelper $formatter)
     {
         $this->formatter = $formatter;
@@ -64,5 +63,4 @@ class TextFormatter
         $output->writeln("<bg=yellow;fg=white> Disclaimer </> in the SensioLabs security advisories database. Execute this");
         $output->writeln("<bg=yellow;fg=white>            </> command regularly to check the newly discovered vulnerabilities.\n");
     }
-
 }

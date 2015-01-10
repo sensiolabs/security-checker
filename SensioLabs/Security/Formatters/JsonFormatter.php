@@ -19,10 +19,8 @@ if (!defined('JSON_PRETTY_PRINT')) {
 
 class JsonFormatter
 {
-
     public function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
     {
         $output->write(json_encode($vulnerabilities, JSON_PRETTY_PRINT));
     }
-
 }
