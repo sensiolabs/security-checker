@@ -19,10 +19,6 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use SensioLabs\Security\Exception\ExceptionInterface;
 
-if (!defined('JSON_PRETTY_PRINT')) {
-    define('JSON_PRETTY_PRINT', 0);
-}
-
 class SecurityCheckerCommand extends Command
 {
     private $checker;
@@ -88,11 +84,20 @@ EOF
             return 1;
         }
 
-         if ('json' === $input->getOption('format')) {
-             $output->write(json_encode($vulnerabilities, JSON_PRETTY_PRINT));
-         } else {
-             $this->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
-         }
+        switch ($input->getOption('format')) {
+            case 'json':
+                $formatter = new \SensioLabs\Security\Formatters\JsonFormatter;
+                break;
+            case 'line':
+                $formatter = new \SensioLabs\Security\Formatters\LineFormatter($this->getHelperSet()->get('formatter'));
+                break;
+            case 'text':
+            default:
+                $formatter = new \SensioLabs\Security\Formatters\TextFormatter($this->getHelperSet()->get('formatter'));
+                break;
+        }
+
+        $formatter->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
 
         if ($this->checker->getLastVulnerabilityCount() > 0) {
             return 1;
