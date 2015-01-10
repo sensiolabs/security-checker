@@ -13,14 +13,14 @@ namespace SensioLabs\Security\Formatters;
 
 use Symfony\Component\Console\Output\OutputInterface;
 
-if (!defined('JSON_PRETTY_PRINT')) {
-    define('JSON_PRETTY_PRINT', 0);
-}
-
 class JsonFormatter
 {
     public function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
     {
-        $output->write(json_encode($vulnerabilities, JSON_PRETTY_PRINT));
+        if (defined('JSON_PRETTY_PRINT')) {
+            $output->write(json_encode($vulnerabilities, JSON_PRETTY_PRINT));
+        } else {
+            $output->write(json_encode($vulnerabilities));
+        }
     }
 }
