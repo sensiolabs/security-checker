@@ -88,8 +88,8 @@ EOF
             case 'json':
                 $formatter = new \SensioLabs\Security\Formatters\JsonFormatter();
                 break;
-            case 'line':
-                $formatter = new \SensioLabs\Security\Formatters\LineFormatter($this->getHelperSet()->get('formatter'));
+            case 'simple':
+                $formatter = new \SensioLabs\Security\Formatters\SimpleFormatter($this->getHelperSet()->get('formatter'));
                 break;
             case 'text':
             default:

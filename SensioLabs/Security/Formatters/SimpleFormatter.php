@@ -14,7 +14,7 @@ namespace SensioLabs\Security\Formatters;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Helper\FormatterHelper;
 
-class LineFormatter
+class SimpleFormatter implements FormatterInterface
 {
     public function __construct(FormatterHelper $formatter)
     {
