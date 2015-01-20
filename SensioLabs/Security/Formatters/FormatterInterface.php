@@ -15,7 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 interface FormatterInterface
 {
-	/**
+    /**
      * Displays a security report as json.
      *
      * @param OutputInterface $output
