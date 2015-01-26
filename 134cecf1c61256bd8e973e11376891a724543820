@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2015-01-10T17:31:57Z
+
+Do we need a FormatterInterface here?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-01-19T15:02:47Z
+
+Indeed, adding an interface would be good.
+
+---------------------------------------------------------------------------
+
+by jenssegers at 2015-01-19T15:03:33Z
+
+I agree on the interface. Should this still be in this PR or are you going to add this after the merge?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-01-19T15:10:12Z
+
+I prefer to merge a complete PR if possible.
+
+---------------------------------------------------------------------------
+
+by jenssegers at 2015-01-20T19:52:17Z
+
+I added a basic `FormatterInterface`.
+
+---------------------------------------------------------------------------
+
+by jenssegers at 2015-01-26T08:58:05Z
+
+Any updates on this PR?
