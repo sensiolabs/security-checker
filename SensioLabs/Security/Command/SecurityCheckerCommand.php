@@ -18,6 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use SensioLabs\Security\Exception\ExceptionInterface;
+use SensioLabs\Security\Formatters\JsonFormatter;
+use SensioLabs\Security\Formatters\SimpleFormatter;
+use SensioLabs\Security\Formatters\TextFormatter;
 
 class SecurityCheckerCommand extends Command
 {
@@ -86,14 +89,14 @@ EOF
 
         switch ($input->getOption('format')) {
             case 'json':
-                $formatter = new \SensioLabs\Security\Formatters\JsonFormatter();
+                $formatter = new JsonFormatter();
                 break;
             case 'simple':
-                $formatter = new \SensioLabs\Security\Formatters\SimpleFormatter($this->getHelperSet()->get('formatter'));
+                $formatter = new SimpleFormatter($this->getHelperSet()->get('formatter'));
                 break;
             case 'text':
             default:
-                $formatter = new \SensioLabs\Security\Formatters\TextFormatter($this->getHelperSet()->get('formatter'));
+                $formatter = new TextFormatter($this->getHelperSet()->get('formatter'));
         }
 
         $formatter->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
