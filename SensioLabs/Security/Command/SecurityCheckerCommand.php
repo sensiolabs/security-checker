@@ -18,10 +18,9 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use SensioLabs\Security\Exception\ExceptionInterface;
-
-if (!defined('JSON_PRETTY_PRINT')) {
-    define('JSON_PRETTY_PRINT', 0);
-}
+use SensioLabs\Security\Formatters\JsonFormatter;
+use SensioLabs\Security\Formatters\SimpleFormatter;
+use SensioLabs\Security\Formatters\TextFormatter;
 
 class SecurityCheckerCommand extends Command
 {
@@ -88,64 +87,22 @@ EOF
             return 1;
         }
 
-         if ('json' === $input->getOption('format')) {
-             $output->write(json_encode($vulnerabilities, JSON_PRETTY_PRINT));
-         } else {
-             $this->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
-         }
+        switch ($input->getOption('format')) {
+            case 'json':
+                $formatter = new JsonFormatter();
+                break;
+            case 'simple':
+                $formatter = new SimpleFormatter($this->getHelperSet()->get('formatter'));
+                break;
+            case 'text':
+            default:
+                $formatter = new TextFormatter($this->getHelperSet()->get('formatter'));
+        }
+
+        $formatter->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
 
         if ($this->checker->getLastVulnerabilityCount() > 0) {
             return 1;
         }
-    }
-
-    /**
-     * Displays a security report as plain text.
-     *
-     * @param OutputInterface $output
-     * @param string          $lockFilePath    The file path to the checked lock file
-     * @param array           $vulnerabilities An array of vulnerabilities
-     */
-    private function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
-    {
-        $output->writeln("\n<fg=blue>Security Check Report\n~~~~~~~~~~~~~~~~~~~~~</>\n");
-        $output->writeln(sprintf('Checked file: <comment>%s</>', realpath($lockFilePath)));
-        $output->write("\n");
-
-        if ($count = count($vulnerabilities)) {
-            $status = 'CRITICAL';
-            $style = 'error';
-        } else {
-            $status = 'OK';
-            $style = 'bg=green;fg=white';
-        }
-
-        $output->writeln($this->getHelper('formatter')->formatBlock(array('['.$status.']', $count.' packages have known vulnerabilities'), $style, true));
-        $output->write("\n");
-
-        if (0 !== $count) {
-            foreach ($vulnerabilities as $dependency => $issues) {
-                $dependencyFullName = $dependency.' ('.$issues['version'].')';
-                $output->writeln('<info>'.$dependencyFullName."\n".str_repeat('-', strlen($dependencyFullName))."</>\n");
-
-                foreach ($issues['advisories'] as $issue => $details) {
-                    $output->write(' * ');
-                    if ($details['cve']) {
-                        $output->write('<comment>'.$details['cve'].': </comment>');
-                    }
-                    $output->writeln($details['title']);
-
-                    if ('' !== $details['link']) {
-                        $output->writeln('   '.$details['link']);
-                    }
-
-                    $output->writeln('');
-                }
-            }
-        }
-
-        $output->writeln("<bg=yellow;fg=white>            </> This checker can only detect vulnerabilities that are referenced");
-        $output->writeln("<bg=yellow;fg=white> Disclaimer </> in the SensioLabs security advisories database. Execute this");
-        $output->writeln("<bg=yellow;fg=white>            </> command regularly to check the newly discovered vulnerabilities.\n");
     }
 }
