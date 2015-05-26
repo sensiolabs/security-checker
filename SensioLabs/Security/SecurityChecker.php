@@ -62,7 +62,7 @@ class SecurityChecker
 
         $postFields = array('lock' => '@'.$lock);
 
-        if (version_compare(PHP_VERSION, '5.5.0') >= 0) {
+        if (PHP_VERSION_ID >= 50500) {
             $postFields['lock'] = new \CurlFile($lock);
         }
 
