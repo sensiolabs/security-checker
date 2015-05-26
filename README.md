@@ -34,5 +34,5 @@ the checker into your own project:
         $alerts = $checker->check('/path/to/composer.lock');
 
 [1]: http://security.sensiolabs.org/
-[2]: https://github.com/sensiolabs/security-advisories
+[2]: https://github.com/FriendsOfPHP/security-advisories
 [3]: http://get.sensiolabs.org/security-checker.phar
