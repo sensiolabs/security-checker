@@ -40,9 +40,7 @@ class SimpleFormatter implements FormatterInterface
             $style = 'info';
         }
 
-        $output->writeln(
-            sprintf('<%s>[%s] %d %s known vulnerabilities</>', $style, $status, $count, $count == 1 ? 'package has' : 'packages have')
-        );
+        $output->writeln(sprintf('<%s>[%s] %d %s known vulnerabilities</>', $style, $status, $count, 1 === $count ? 'package has' : 'packages have'));
 
         if (0 !== $count) {
             $output->write("\n");

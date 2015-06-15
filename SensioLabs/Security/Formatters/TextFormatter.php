@@ -42,13 +42,8 @@ class TextFormatter implements FormatterInterface
             $style = 'bg=green;fg=white';
         }
 
-        $output->writeln(
-            $this->formatter->formatBlock(
-                array('['.$status.']', $count.' '.($count == 1 ? 'package has' : 'packages have').' known vulnerabilities'),
-                $style,
-                true
-            )
-        );
+        $message = sprintf('%d %s known vulnerabilities', $count, 1 === $count ? 'package has' : 'packages have');
+        $output->writeln($this->formatter->formatBlock(array('['.$status.']', $message), $style, true));
         $output->write("\n");
 
         if (0 !== $count) {
