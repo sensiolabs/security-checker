@@ -30,7 +30,7 @@ class SimpleFormatter implements FormatterInterface
      */
     public function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
     {
-        $output->writeln(sprintf('Security Check Report: <comment>%s</>', realpath($lockFilePath)));
+        $output->writeln(sprintf('Security Check Report: <comment>%s</comment>', realpath($lockFilePath)));
 
         if ($count = count($vulnerabilities)) {
             $status = 'CRITICAL';
@@ -47,7 +47,7 @@ class SimpleFormatter implements FormatterInterface
 
             foreach ($vulnerabilities as $dependency => $issues) {
                 $dependencyFullName = $dependency.' ('.$issues['version'].')';
-                $output->writeln('<info>'.$dependencyFullName."\n".str_repeat('-', strlen($dependencyFullName))."</>\n");
+                $output->writeln('<info>'.$dependencyFullName."\n".str_repeat('-', strlen($dependencyFullName))."</info>\n");
 
                 foreach ($issues['advisories'] as $issue => $details) {
                     $output->write(' * ');
