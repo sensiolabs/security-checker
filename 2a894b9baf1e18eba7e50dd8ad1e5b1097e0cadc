@@ -1,0 +1,25 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2015-07-16T13:11:12Z
+
+That's a huge BC break for people using this for automation. Not sure it is worth it.
+
+---------------------------------------------------------------------------
+
+by OskarStark at 2015-07-16T13:13:02Z
+
+i thought these arguments are just ordered and the naming is not so important!
+
+thanks for the info
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-07-16T13:14:00Z
+
+Indeed, my mistake, this is an argument, not an option.
+
+---------------------------------------------------------------------------
+
+by OskarStark at 2015-07-16T13:16:30Z
+
+i stumpled upon this as i looked at the help of the command and lock was a bit confusing for me...
