@@ -41,7 +41,7 @@ class SecurityCheckerCommand extends Command
         $this
             ->setName('security:check')
             ->setDefinition(array(
-                new InputArgument('lock', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
+                new InputArgument('lockfile', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
                 new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout'),
@@ -80,7 +80,7 @@ EOF
         }
 
         try {
-            $vulnerabilities = $this->checker->check($input->getArgument('lock'));
+            $vulnerabilities = $this->checker->check($input->getArgument('lockfile'));
         } catch (ExceptionInterface $e) {
             $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($e->getMessage(), 'error', true));
 
@@ -99,7 +99,7 @@ EOF
                 $formatter = new TextFormatter($this->getHelperSet()->get('formatter'));
         }
 
-        $formatter->displayResults($output, $input->getArgument('lock'), $vulnerabilities);
+        $formatter->displayResults($output, $input->getArgument('lockfile'), $vulnerabilities);
 
         if ($this->checker->getLastVulnerabilityCount() > 0) {
             return 1;
