@@ -31,7 +31,7 @@ class TextFormatter implements FormatterInterface
     public function displayResults(OutputInterface $output, $lockFilePath, array $vulnerabilities)
     {
         $output->writeln("\n<fg=blue>Security Check Report\n~~~~~~~~~~~~~~~~~~~~~</>\n");
-        $output->writeln(sprintf('Checked file: <comment>%s</>', realpath($lockFilePath)));
+        $output->writeln(sprintf('Checked file: <comment>%s</comment>', realpath($lockFilePath)));
         $output->write("\n");
 
         if ($count = count($vulnerabilities)) {
@@ -49,7 +49,7 @@ class TextFormatter implements FormatterInterface
         if (0 !== $count) {
             foreach ($vulnerabilities as $dependency => $issues) {
                 $dependencyFullName = $dependency.' ('.$issues['version'].')';
-                $output->writeln('<info>'.$dependencyFullName."\n".str_repeat('-', strlen($dependencyFullName))."</>\n");
+                $output->writeln('<info>'.$dependencyFullName."\n".str_repeat('-', strlen($dependencyFullName))."</info>\n");
 
                 foreach ($issues['advisories'] as $issue => $details) {
                     $output->write(' * ');
