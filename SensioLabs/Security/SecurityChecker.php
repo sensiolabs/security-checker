@@ -28,7 +28,7 @@ class SecurityChecker
     private $crawler;
 
     /**
-     * @param CrawlerInterface $crawler
+     * @param CrawlerInterface $crawler|null
      */
     public function __construct(CrawlerInterface $crawler = null)
     {
