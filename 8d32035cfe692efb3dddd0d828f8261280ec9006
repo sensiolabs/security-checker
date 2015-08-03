@@ -1,0 +1,31 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2015-08-03T08:04:16Z
+
+Another option is to drop cURL support and only keep `file_get_contents` support.
+
+ping @javiereguiluz @stof
+
+---------------------------------------------------------------------------
+
+by javiereguiluz at 2015-08-03T08:10:20Z
+
+:+1: to remove the cURL requirement. In Symfony Installer we recently switched to use `file_get_contents()` for Windows users. This is the installation method which seems to work for most users:
+
+```
+c:\> php -r "file_put_contents('symfony', file_get_contents('http://symfony.com/installer'));"
+```
+
+In any case, I'd maintain cURL support because the support of `file_get_contents()` for URLs can be disabled via the `allow_url_fopen` setting in php.ini file.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-08-03T09:12:20Z
+
+Comments addressed
+
+---------------------------------------------------------------------------
+
+by stof at 2015-08-03T09:28:59Z
+
+:+1:
