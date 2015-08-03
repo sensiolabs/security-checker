@@ -4,7 +4,7 @@
 /*
  * This file is part of the SensioLabs Security Checker.
  *
- * (c) 2013 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -27,6 +27,6 @@ use Symfony\Component\Console\Application;
 use SensioLabs\Security\Command\SecurityCheckerCommand;
 use SensioLabs\Security\SecurityChecker;
 
-$console = new Application('SensioLabs Security Checker', '2.0');
+$console = new Application('SensioLabs Security Checker', '3.0');
 $console->add(new SecurityCheckerCommand(new SecurityChecker()));
 $console->run();

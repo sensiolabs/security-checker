@@ -3,7 +3,7 @@
 /*
  * This file is part of the SensioLabs Security Checker.
  *
- * (c) 2013 Fabien Potencier
+ * (c) Fabien Potencier
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -67,8 +67,8 @@ class TextFormatter implements FormatterInterface
             }
         }
 
-        $output->writeln("<bg=yellow;fg=white>            </> This checker can only detect vulnerabilities that are referenced");
-        $output->writeln("<bg=yellow;fg=white> Disclaimer </> in the SensioLabs security advisories database. Execute this");
+        $output->writeln('<bg=yellow;fg=white>            </> This checker can only detect vulnerabilities that are referenced');
+        $output->writeln('<bg=yellow;fg=white> Disclaimer </> in the SensioLabs security advisories database. Execute this');
         $output->writeln("<bg=yellow;fg=white>            </> command regularly to check the newly discovered vulnerabilities.\n");
     }
 }
