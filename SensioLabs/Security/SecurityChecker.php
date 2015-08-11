@@ -56,4 +56,20 @@ class SecurityChecker
     {
         return $this->vulnerabilityCount;
     }
+
+    /**
+     * @param int $timeout
+     */
+    public function setTimeout($timeout)
+    {
+        $this->crawler->setTimeout($timeout);
+    }
+
+    /**
+     * @param string $endPoint
+     */
+    public function setEndPoint($endPoint)
+    {
+        $this->crawler->setEndPoint($endPoint);
+    }
 }
