@@ -1,0 +1,29 @@
+---------------------------------------------------------------------------
+
+by GrahamCampbell at 2015-08-11T09:10:34Z
+
+That's probably intentional isn't it. They're meant to be immutable arn't they?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-08-11T10:50:15Z
+
+Indeed, that's intentional, you should use set them on a crawler and pass it to the security checker instead. That's why I bumped the version of the package to a new major one by the way.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-08-11T10:51:37Z
+
+I've just read your related issue. I'm going to have a look at it now.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2015-08-11T10:55:14Z
+
+Ok, that's not that easy to fix. I think a better fix would be to add a `getCrawler` on the security checker and change the command accordingly. Can you try that?
+
+---------------------------------------------------------------------------
+
+by opalenet-yann at 2015-08-11T11:15:14Z
+
+Here you go.
