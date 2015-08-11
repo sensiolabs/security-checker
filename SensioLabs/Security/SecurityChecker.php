@@ -58,18 +58,10 @@ class SecurityChecker
     }
 
     /**
-     * @param int $timeout
+     * @return CrawlerInterface
      */
-    public function setTimeout($timeout)
+    public function getCrawler()
     {
-        $this->crawler->setTimeout($timeout);
-    }
-
-    /**
-     * @param string $endPoint
-     */
-    public function setEndPoint($endPoint)
-    {
-        $this->crawler->setEndPoint($endPoint);
+        return $this->crawler;
     }
 }
