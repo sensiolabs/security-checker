@@ -56,4 +56,12 @@ class SecurityChecker
     {
         return $this->vulnerabilityCount;
     }
+
+    /**
+     * @return CrawlerInterface
+     */
+    public function getCrawler()
+    {
+        return $this->crawler;
+    }
 }
