@@ -72,11 +72,11 @@ EOF
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         if ($endPoint = $input->getOption('end-point')) {
-            $this->checker->setEndPoint($endPoint);
+            $this->checker->getCrawler()->setEndPoint($endPoint);
         }
 
         if ($timeout = $input->getOption('timeout')) {
-            $this->checker->setTimeout($timeout);
+            $this->checker->getCrawler()->setTimeout($timeout);
         }
 
         try {
