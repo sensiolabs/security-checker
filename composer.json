@@ -9,7 +9,7 @@
         }
     ],
     "require": {
-        "symfony/console": "~2.0"
+        "symfony/console": "~2.0|~3.0"
     },
     "bin": ["security-checker"],
     "autoload": {
