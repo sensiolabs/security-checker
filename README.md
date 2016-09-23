@@ -28,10 +28,12 @@ the checker into your own project:
 
  * by using the `SecurityChecker` class directly into your own code:
 
-        use SensioLabs\Security\SecurityChecker;
+```php
+use SensioLabs\Security\SecurityChecker;
 
-        $checker = new SecurityChecker();
-        $alerts = $checker->check('/path/to/composer.lock');
+$checker = new SecurityChecker();
+$alerts = $checker->check('/path/to/composer.lock');
+```
 
 [1]: http://security.sensiolabs.org/
 [2]: https://github.com/FriendsOfPHP/security-advisories
