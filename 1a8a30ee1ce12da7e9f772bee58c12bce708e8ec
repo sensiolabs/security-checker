@@ -1,0 +1,17 @@
+---------------------------------------------------------------------------
+
+by xabbuh at 2015-09-29T15:16:27Z
+
+This needs special treatment for Symfony 2.3.
+
+---------------------------------------------------------------------------
+
+by javiereguiluz at 2015-09-29T15:17:31Z
+
+I propose to do the same as for SwiftMailerBundle's commands: block this PR until May 2016, when Symfony 2.3 will die.
+
+---------------------------------------------------------------------------
+
+by relaxnow at 2016-09-23T13:10:38Z
+
+@javiereguiluz / @xabbuh it is well past May 2016, can this be merged?
