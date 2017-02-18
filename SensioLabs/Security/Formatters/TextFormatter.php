@@ -34,7 +34,8 @@ class TextFormatter implements FormatterInterface
     {
         $output = new SymfonyStyle(new ArrayInput(array()), $output);
         $output->title('Symfony Security Check Report');
-        $output->comment(sprintf('Checked file: <comment>%s</>', realpath($lockFilePath)));
+        // use ->comment when bumping console to 2.8+
+        $output->writeln(sprintf('<fg=default;bg=default> // </>Checked file: <comment>%s</>', realpath($lockFilePath)));
 
         if ($count = count($vulnerabilities)) {
             $output->error(sprintf('%d packages have known vulnerabilities.', $count));
