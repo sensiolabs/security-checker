@@ -17,9 +17,19 @@ use SensioLabs\Security\Crawler\DefaultCrawler;
 
 class SecurityChecker
 {
+    /**
+     * @var int
+     */
     private $vulnerabilityCount;
+    
+    /**
+     * @var CrawlerInterface
+     */
     private $crawler;
 
+    /**
+     * @param CrawlerInterface $crawler|null
+     */
     public function __construct(CrawlerInterface $crawler = null)
     {
         $this->crawler = null === $crawler ? new DefaultCrawler() : $crawler;
