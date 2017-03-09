@@ -12,6 +12,7 @@
 namespace SensioLabs\Security\Crawler;
 
 use SensioLabs\Security\Exception\RuntimeException;
+use SensioLabs\Security\SecurityChecker;
 
 /**
  * @internal
@@ -33,7 +34,7 @@ class FileGetContentsCrawler extends BaseCrawler
                 'follow_location' => true,
                 'max_redirects' => 3,
                 'timeout' => $this->timeout,
-                'user_agent' => 'SecurityChecker-CLI/4 FGC PHP',
+                'user_agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
             ),
             'ssl' => array(
                 'cafile' => $certFile,

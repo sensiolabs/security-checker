@@ -17,6 +17,8 @@ use SensioLabs\Security\Crawler\DefaultCrawler;
 
 class SecurityChecker
 {
+    const VERSION = '4';
+
     private $vulnerabilityCount;
     private $crawler;
 
