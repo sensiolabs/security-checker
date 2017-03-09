@@ -78,6 +78,7 @@ class SecurityChecker
         curl_setopt($curl, CURLOPT_FAILONERROR, false);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 1);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 2);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'SecurityChecker-CLI/2 CURL PHP');
 
         $cert = __DIR__.'/Resources/security.sensiolabs.org.crt';
         $tmpFile = null;
