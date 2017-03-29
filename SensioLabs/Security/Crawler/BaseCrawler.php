@@ -42,17 +42,7 @@ abstract class BaseCrawler implements CrawlerInterface
      */
     public function check($lock)
     {
-        $certFile = $this->getCertFile();
-
-        try {
-            list($headers, $body) = $this->doCheck($lock, $certFile);
-        } catch (\Exception $e) {
-            if (__DIR__.'/../Resources/security.sensiolabs.org.crt' !== $certFile) {
-                unlink($certFile);
-            }
-
-            throw $e;
-        }
+        list($headers, $body) = $this->doCheck($lock);
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
@@ -64,7 +54,7 @@ abstract class BaseCrawler implements CrawlerInterface
     /**
      * @return array An array where the first element is a headers string and second one the response body
      */
-    abstract protected function doCheck($lock, $certFile);
+    abstract protected function doCheck($lock);
 
     protected function getLockContents($lock)
     {
@@ -84,20 +74,5 @@ abstract class BaseCrawler implements CrawlerInterface
         }
 
         return json_encode($packages);
-    }
-
-    private function getCertFile()
-    {
-        $certFile = __DIR__.'/../Resources/security.sensiolabs.org.crt';
-        if ('phar://' !== substr(__FILE__, 0, 7)) {
-            return $certFile;
-        }
-
-        $tmpFile = tempnam(sys_get_temp_dir(), 'sls');
-        if (false === @copy($certFile, $tmpFile)) {
-            throw new RuntimeException(sprintf('Unable to copy the certificate in "%s".', $tmpFile));
-        }
-
-        return $tmpFile;
     }
 }

@@ -31,7 +31,7 @@ class CurlCrawler extends BaseCrawler
     /**
      * {@inheritdoc}
      */
-    protected function doCheck($lock, $certFile)
+    protected function doCheck($lock)
     {
         if (false === $curl = curl_init()) {
             throw new RuntimeException('Unable to create a cURL handle.');
