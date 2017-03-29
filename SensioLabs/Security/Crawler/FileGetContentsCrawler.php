@@ -37,7 +37,6 @@ class FileGetContentsCrawler extends BaseCrawler
                 'user_agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
             ),
             'ssl' => array(
-                'cafile' => $certFile,
                 'verify_peer' => 1,
                 'verify_host' => 2,
             ),
