@@ -1,0 +1,47 @@
+---------------------------------------------------------------------------
+
+by jenkoian at 2017-03-31T10:43:05Z
+
+This doesn't seem to have fixed the issue on travis for me (re. #75) see https://travis-ci.org/jenkoian/flysystem-gaufrette/builds/217122781
+
+---------------------------------------------------------------------------
+
+by graemechapman at 2017-03-31T11:06:51Z
+
+@tucksaun I have just tried running your branch through Travis CI, unfortunately this hasn't resolved the issue. Still receiving
+ ``` An error occurred: gnutls_handshake() failed: A TLS fatal alert has been received..```
+
+---------------------------------------------------------------------------
+
+by tucksaun at 2017-03-31T12:20:33Z
+
+This should fix the `An error occurred: SSL: certificate verification failed (result: 5).`, I'll have a look for the other one.
+
+---------------------------------------------------------------------------
+
+by gabeguz at 2017-03-31T12:33:04Z
+
+Hmm... strangely, this fixes the issue on my local dev environment, but not on circleci:
+
+```
+$ cd vendor/sensio-labs/security-checker
+$ curl https://github.com/sensiolabs/security-checker/pull/77.patch > 77.patch
+$ patch -p1 < 77.patch
+$ composer install
+$ ./security-checker security:check ./composer.lock
+
+  An error occurred: gnutls_handshake() failed: A TLS fatal alert has been received..
+```
+
+---------------------------------------------------------------------------
+
+by tucksaun at 2017-03-31T14:48:57Z
+
+@jenkoian thanks for your build link, it helped me to reproduce it and iterate on it :)
+
+So we actually hit two issues here: one is because some distributions can have an empty CA bundle and thus can not check the certificate, this PR is fixing this case.
+
+The other one is that PHP build by Travis can not negotiate TLS handshake (see https://github.com/travis-ci/travis-ci/issues/6339). And we can't do anything from here. I tried several SSL version settings and nothing worked.
+As we are hand tied here, we came up with another solution with @fabpot: we now allow HTTP traffic on http://security.sensiolabs.org/check_lock only, so you can use `security-checker security:check --end-point=http://security.sensiolabs.org/check_lock`.
+
+Travis-CI or circle-ci now needs to update their builds.
