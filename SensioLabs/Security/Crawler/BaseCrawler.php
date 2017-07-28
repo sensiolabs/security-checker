@@ -76,7 +76,7 @@ abstract class BaseCrawler implements CrawlerInterface
                     'name' => $package['name'],
                     'version' => $package['version'],
                 );
-                if (false !== strpos($package['version'], 'dev')) {
+                if (isset($package['time']) && false !== strpos($package['version'], 'dev')) {
                     $data['time'] = $package['time'];
                 }
                 $packages[$key][] = $data;
