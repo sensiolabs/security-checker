@@ -1,0 +1,5 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2017-07-28T06:35:26Z
+
+It's quite significant. For instance, the symfony.com composer.lock file size is 188.5kb. Now, we only upload 4.5kb.
