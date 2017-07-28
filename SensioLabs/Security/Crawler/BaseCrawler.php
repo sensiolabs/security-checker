@@ -66,6 +66,30 @@ abstract class BaseCrawler implements CrawlerInterface
      */
     abstract protected function doCheck($lock, $certFile);
 
+    protected function getLockContents($lock)
+    {
+        $contents = json_decode(file_get_contents($lock), true);
+        $packages = array('packages' => array(), 'packages-dev' => array());
+        foreach (array('packages', 'packages-dev') as $key) {
+            if (!isset($contents[$key])) {
+                continue;
+            }
+
+            foreach ($contents[$key] as $package) {
+                $data = array(
+                    'name' => $package['name'],
+                    'version' => $package['version'],
+                );
+                if (false !== strpos($package['version'], 'dev')) {
+                    $data['time'] = $package['time'];
+                }
+                $packages[$key][] = $data;
+            }
+        }
+
+        return json_encode($packages);
+    }
+
     private function getCertFile()
     {
         $certFile = __DIR__.'/../Resources/security.sensiolabs.org.crt';
