@@ -58,7 +58,7 @@ abstract class BaseCrawler implements CrawlerInterface
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
-        return array(intval($matches[1]), json_decode($body, true));
+        return array((int) $matches[1], json_decode($body, true));
     }
 
     /**
@@ -71,10 +71,6 @@ abstract class BaseCrawler implements CrawlerInterface
         $contents = json_decode(file_get_contents($lock), true);
         $packages = array('packages' => array(), 'packages-dev' => array());
         foreach (array('packages', 'packages-dev') as $key) {
-            if (!isset($contents[$key])) {
-                continue;
-            }
-
             foreach ($contents[$key] as $package) {
                 $data = array(
                     'name' => $package['name'],
