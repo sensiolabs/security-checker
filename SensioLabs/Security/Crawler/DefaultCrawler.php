@@ -44,6 +44,7 @@ class DefaultCrawler implements CrawlerInterface
     public function setTimeout($timeout)
     {
         $this->crawler->setTimeout($timeout);
+        $this->fgc->setTimeout($timeout);
     }
 
     /**
@@ -52,5 +53,6 @@ class DefaultCrawler implements CrawlerInterface
     public function setEndPoint($endPoint)
     {
         $this->crawler->setEndPoint($endPoint);
+        $this->fgc->setEndPoint($endPoint);
     }
 }
