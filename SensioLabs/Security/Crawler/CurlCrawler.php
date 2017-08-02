@@ -36,14 +36,18 @@ class CurlCrawler extends BaseCrawler
         if (false === $curl = curl_init()) {
             throw new RuntimeException('Unable to create a cURL handle.');
         }
+        $tmplock = tempnam(sys_get_temp_dir(), 'sensiolabs_security');
+        $handle = fopen($tmplock, 'w');
+        fwrite($handle, $this->getLockContents($lock));
+        fclose($handle);
 
-        $lock = new \CurlFile('data://text/plain;base64,'.base64_encode($this->getLockContents($lock)), 'text/plain', 'composer.lock');
+        $postFields = array('lock' => PHP_VERSION_ID >= 50500 ? new \CurlFile($tmplock) : '@'.$tmplock);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_URL, $this->endPoint);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-        curl_setopt($curl, CURLOPT_POSTFIELDS, array('lock' => $lock));
+        curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, ini_get('open_basedir') ? 0 : 1);
@@ -55,6 +59,8 @@ class CurlCrawler extends BaseCrawler
         curl_setopt($curl, CURLOPT_USERAGENT, sprintf('SecurityChecker-CLI/%s CURL PHP', SecurityChecker::VERSION));
 
         $response = curl_exec($curl);
+
+        unlink($tmplock);
 
         if (false === $response) {
             $error = curl_error($curl);
