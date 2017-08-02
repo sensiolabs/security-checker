@@ -17,10 +17,12 @@ namespace SensioLabs\Security\Crawler;
 class DefaultCrawler implements CrawlerInterface
 {
     private $crawler;
+    private $fgc;
 
     public function __construct()
     {
-        $this->crawler = function_exists('curl_init') ? new CurlCrawler() : new FileGetContentsCrawler();
+        $this->fgc = new FileGetContentsCrawler();
+        $this->crawler = function_exists('curl_init') ? new CurlCrawler() : $this->fgc;
     }
 
     /**
@@ -28,7 +30,12 @@ class DefaultCrawler implements CrawlerInterface
      */
     public function check($lock)
     {
-        return $this->crawler->check($lock);
+        if (0 !== strpos($lock, 'data://text/plain;base64,')) {
+            return $this->crawler->check($lock);
+        }
+
+        // we must use FileGetContentsCrawler() here
+        return $this->fgc->check($lock);
     }
 
     /**
