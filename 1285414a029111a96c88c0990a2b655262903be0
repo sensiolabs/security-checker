@@ -1,0 +1,7 @@
+---------------------------------------------------------------------------
+
+by ricknox at 2017-05-07T17:48:03Z
+
+This pull request can be merged because the files and code are obsolete since the #77 PR. Also issue #66 can be resolved because of this PR.
+
+Only need to remove the certificates from box.json: https://github.com/sensiolabs/security-checker/blob/master/box.json#L19 ☺️
