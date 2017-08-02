@@ -41,13 +41,11 @@ class CurlCrawler extends BaseCrawler
         fwrite($handle, $this->getLockContents($lock));
         fclose($handle);
 
-        $postFields = array('lock' => PHP_VERSION_ID >= 50500 ? new \CurlFile($tmplock) : '@'.$tmplock);
-
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_HEADER, true);
         curl_setopt($curl, CURLOPT_URL, $this->endPoint);
         curl_setopt($curl, CURLOPT_HTTPHEADER, array('Accept: application/json'));
-        curl_setopt($curl, CURLOPT_POSTFIELDS, $postFields);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, array('lock' => new \CurlFile($tmplock, 'application/octet-stream', 'composer.lock')));
         curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, $this->timeout);
         curl_setopt($curl, CURLOPT_TIMEOUT, 10);
         curl_setopt($curl, CURLOPT_FOLLOWLOCATION, ini_get('open_basedir') ? 0 : 1);
