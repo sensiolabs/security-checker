@@ -19,7 +19,7 @@ interface CrawlerInterface
     /**
      * Checks a Composer lock file.
      *
-     * @param string $lock The path to the composer.lock file
+     * @param string $lock The path to the composer.lock file or a string able to be opened via file_get_contents
      *
      * @return An array of two items: the number of vulnerabilities and an array of vulnerabilities
      */

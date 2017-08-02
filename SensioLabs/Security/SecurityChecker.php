@@ -39,14 +39,16 @@ class SecurityChecker
      */
     public function check($lock)
     {
-        if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
-            $lock = $lock.'/composer.lock';
-        } elseif (preg_match('/composer\.json$/', $lock)) {
-            $lock = str_replace('composer.json', 'composer.lock', $lock);
-        }
+        if (0 !== strpos($lock, 'data://text/plain;base64,')) {
+            if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
+                $lock = $lock.'/composer.lock';
+            } elseif (preg_match('/composer\.json$/', $lock)) {
+                $lock = str_replace('composer.json', 'composer.lock', $lock);
+            }
 
-        if (!is_file($lock)) {
-            throw new RuntimeException('Lock file does not exist.');
+            if (!is_file($lock)) {
+                throw new RuntimeException('Lock file does not exist.');
+            }
         }
 
         list($this->vulnerabilityCount, $vulnerabilities) = $this->crawler->check($lock);
