@@ -27,10 +27,14 @@ class FileGetContentsCrawler extends BaseCrawler
     protected function doCheck($lock)
     {
         $boundary = '------------------------'.md5(microtime(true));
+        $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json";
+        if ($this->token) {
+            $headers .= "\r\nAuthorization: Token {$this->token}";
+        }
         $context = stream_context_create(array(
             'http' => array(
                 'method' => 'POST',
-                'header' => "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json",
+                'header' => $headers,
                 'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"composer.lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".$this->getLockContents($lock)."\r\n--$boundary--\r\n",
                 'ignore_errors' => true,
                 'follow_location' => true,

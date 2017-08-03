@@ -28,4 +28,6 @@ interface CrawlerInterface
     public function setTimeout($timeout);
 
     public function setEndPoint($endPoint);
+
+    public function setToken($token);
 }

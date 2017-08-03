@@ -45,6 +45,7 @@ class SecurityCheckerCommand extends Command
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
                 new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout in seconds'),
+                new InputOption('token', '', InputOption::VALUE_REQUIRED, 'The server token', ''),
             ))
             ->setDescription('Checks security issues in your project dependencies')
             ->setHelp(<<<EOF
@@ -77,6 +78,10 @@ EOF
 
         if ($timeout = $input->getOption('timeout')) {
             $this->checker->getCrawler()->setTimeout($timeout);
+        }
+
+        if ($token = $input->getOption('token')) {
+            $this->checker->getCrawler()->setToken($token);
         }
 
         try {

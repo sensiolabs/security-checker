@@ -55,4 +55,14 @@ class DefaultCrawler implements CrawlerInterface
         $this->crawler->setEndPoint($endPoint);
         $this->fgc->setEndPoint($endPoint);
     }
+
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setToken($token)
+    {
+        $this->crawler->setToken($token);
+        $this->fgc->setToken($token);
+    }
 }
