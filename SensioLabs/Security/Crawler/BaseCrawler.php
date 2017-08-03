@@ -71,6 +71,9 @@ abstract class BaseCrawler implements CrawlerInterface
         $contents = json_decode(file_get_contents($lock), true);
         $packages = array('packages' => array(), 'packages-dev' => array());
         foreach (array('packages', 'packages-dev') as $key) {
+            if (!is_array($contents[$key])) {
+                continue;
+            }
             foreach ($contents[$key] as $package) {
                 $data = array(
                     'name' => $package['name'],
