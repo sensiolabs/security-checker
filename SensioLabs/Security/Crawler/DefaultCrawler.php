@@ -56,7 +56,6 @@ class DefaultCrawler implements CrawlerInterface
         $this->fgc->setEndPoint($endPoint);
     }
 
-
     /**
      * {@inheritdoc}
      */

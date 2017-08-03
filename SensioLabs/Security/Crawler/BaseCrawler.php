@@ -68,7 +68,8 @@ abstract class BaseCrawler implements CrawlerInterface
     protected function getLockContents($lock)
     {
         $contents = json_decode(file_get_contents($lock), true);
-        $packages = array('packages' => array(), 'packages-dev' => array());
+        $hash = isset($contents['content-hash']) ? $contents['content-hash'] : (isset($contents['hash']) ? $contents['hash'] : '');
+        $packages = array('content-hash' => $hash, 'packages' => array(), 'packages-dev' => array());
         foreach (array('packages', 'packages-dev') as $key) {
             if (!is_array($contents[$key])) {
                 continue;
