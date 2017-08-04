@@ -61,7 +61,12 @@ class DefaultCrawler implements CrawlerInterface
      */
     public function setToken($token)
     {
-        $this->crawler->setToken($token);
-        $this->fgc->setToken($token);
+        $this->addHeader('Authorization', 'Token '.$token);
+    }
+
+    public function addHeader($key, $value)
+    {
+        $this->crawler->addHeader($key, $value);
+        $this->fgc->addHeader($key, $value);
     }
 }

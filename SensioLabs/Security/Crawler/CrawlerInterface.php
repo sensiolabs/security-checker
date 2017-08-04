@@ -30,4 +30,6 @@ interface CrawlerInterface
     public function setEndPoint($endPoint);
 
     public function setToken($token);
+
+    public function addHeader($key, $value);
 }

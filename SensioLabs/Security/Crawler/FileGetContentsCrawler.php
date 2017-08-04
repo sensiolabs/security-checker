@@ -28,8 +28,8 @@ class FileGetContentsCrawler extends BaseCrawler
     {
         $boundary = '------------------------'.md5(microtime(true));
         $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json";
-        if ($this->token) {
-            $headers .= "\r\nAuthorization: Token {$this->token}";
+        foreach ($this->headers as $header) {
+            $headers .= "\r\n$header";
         }
         $context = stream_context_create(array(
             'http' => array(

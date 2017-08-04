@@ -20,7 +20,7 @@ abstract class BaseCrawler implements CrawlerInterface
 {
     protected $endPoint = 'https://security.sensiolabs.org/check_lock';
     protected $timeout = 20;
-    protected $token;
+    protected $headers;
 
     /**
      * {@inheritdoc}
@@ -43,7 +43,12 @@ abstract class BaseCrawler implements CrawlerInterface
      */
     public function setToken($token)
     {
-        $this->token = $token;
+        $this->addHeader('Authorization', 'Token '.$token);
+    }
+
+    public function addHeader($key, $value)
+    {
+        $this->headers[] = $key.': '.$value;
     }
 
     /**
