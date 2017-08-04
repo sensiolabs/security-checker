@@ -28,14 +28,14 @@ class DefaultCrawler implements CrawlerInterface
     /**
      * {@inheritdoc}
      */
-    public function check($lock)
+    public function check($lock, array $headers = array())
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
-            return $this->crawler->check($lock);
+            return $this->crawler->check($lock, $headers);
         }
 
         // we must use FileGetContentsCrawler() here
-        return $this->fgc->check($lock);
+        return $this->fgc->check($lock, $headers);
     }
 
     /**

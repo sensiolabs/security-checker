@@ -20,7 +20,7 @@ abstract class BaseCrawler implements CrawlerInterface
 {
     protected $endPoint = 'https://security.sensiolabs.org/check_lock';
     protected $timeout = 20;
-    protected $headers;
+    protected $headers = array();
 
     /**
      * {@inheritdoc}
@@ -54,9 +54,9 @@ abstract class BaseCrawler implements CrawlerInterface
     /**
      * {@inheritdoc}
      */
-    public function check($lock)
+    public function check($lock, array $headers = array())
     {
-        list($headers, $body) = $this->doCheck($lock);
+        list($headers, $body) = $this->doCheck($lock, $headers);
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
