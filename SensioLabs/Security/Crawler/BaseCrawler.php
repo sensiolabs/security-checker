@@ -20,6 +20,7 @@ abstract class BaseCrawler implements CrawlerInterface
 {
     protected $endPoint = 'https://security.sensiolabs.org/check_lock';
     protected $timeout = 20;
+    protected $headers = array();
 
     /**
      * {@inheritdoc}
@@ -40,9 +41,22 @@ abstract class BaseCrawler implements CrawlerInterface
     /**
      * {@inheritdoc}
      */
-    public function check($lock)
+    public function setToken($token)
     {
-        list($headers, $body) = $this->doCheck($lock);
+        $this->addHeader('Authorization', 'Token '.$token);
+    }
+
+    public function addHeader($key, $value)
+    {
+        $this->headers[] = $key.': '.$value;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function check($lock, array $headers = array())
+    {
+        list($headers, $body) = $this->doCheck($lock, $headers);
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
@@ -59,7 +73,8 @@ abstract class BaseCrawler implements CrawlerInterface
     protected function getLockContents($lock)
     {
         $contents = json_decode(file_get_contents($lock), true);
-        $packages = array('packages' => array(), 'packages-dev' => array());
+        $hash = isset($contents['content-hash']) ? $contents['content-hash'] : (isset($contents['hash']) ? $contents['hash'] : '');
+        $packages = array('content-hash' => $hash, 'packages' => array(), 'packages-dev' => array());
         foreach (array('packages', 'packages-dev') as $key) {
             if (!is_array($contents[$key])) {
                 continue;

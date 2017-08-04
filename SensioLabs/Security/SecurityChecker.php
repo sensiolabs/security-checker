@@ -30,14 +30,15 @@ class SecurityChecker
     /**
      * Checks a composer.lock file.
      *
-     * @param string $lock The path to the composer.lock file
+     * @param string $lock    The path to the composer.lock file
+     * @param array  $headers An array of headers to add for this specific HTTP request
      *
      * @return array An array of vulnerabilities
      *
      * @throws RuntimeException When the lock file does not exist
      * @throws RuntimeException When the certificate can not be copied
      */
-    public function check($lock)
+    public function check($lock, array $headers = array())
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
             if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
@@ -51,7 +52,7 @@ class SecurityChecker
             }
         }
 
-        list($this->vulnerabilityCount, $vulnerabilities) = $this->crawler->check($lock);
+        list($this->vulnerabilityCount, $vulnerabilities) = $this->crawler->check($lock, $headers);
 
         return $vulnerabilities;
     }

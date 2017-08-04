@@ -28,14 +28,14 @@ class DefaultCrawler implements CrawlerInterface
     /**
      * {@inheritdoc}
      */
-    public function check($lock)
+    public function check($lock, array $headers = array())
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
-            return $this->crawler->check($lock);
+            return $this->crawler->check($lock, $headers);
         }
 
         // we must use FileGetContentsCrawler() here
-        return $this->fgc->check($lock);
+        return $this->fgc->check($lock, $headers);
     }
 
     /**
@@ -54,5 +54,19 @@ class DefaultCrawler implements CrawlerInterface
     {
         $this->crawler->setEndPoint($endPoint);
         $this->fgc->setEndPoint($endPoint);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setToken($token)
+    {
+        $this->addHeader('Authorization', 'Token '.$token);
+    }
+
+    public function addHeader($key, $value)
+    {
+        $this->crawler->addHeader($key, $value);
+        $this->fgc->addHeader($key, $value);
     }
 }
