@@ -24,10 +24,10 @@ class FileGetContentsCrawler extends BaseCrawler
     /**
      * {@inheritdoc}
      */
-    protected function doCheck($lock, array $contextualHeaders = array())
+    protected function doCheck($lock, $format = 'json', array $contextualHeaders = array())
     {
         $boundary = '------------------------'.md5(microtime(true));
-        $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: application/json";
+        $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: ".$this->getContentType($format);
         foreach ($this->headers as $header) {
             $headers .= "\r\n$header";
         }

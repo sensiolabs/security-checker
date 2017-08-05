@@ -11,6 +11,8 @@
 
 namespace SensioLabs\Security\Crawler;
 
+use SensioLabs\Security\Result;
+
 /**
  * @internal
  */
@@ -20,11 +22,12 @@ interface CrawlerInterface
      * Checks a Composer lock file.
      *
      * @param string $lock    The path to the composer.lock file or a string able to be opened via file_get_contents
+     * @param string $format  The format of the result
      * @param array  $headers An array of headers to add for this specific HTTP request
      *
-     * @return An array of two items: the number of vulnerabilities and an array of vulnerabilities
+     * @return Result
      */
-    public function check($lock, array $headers = array());
+    public function check($lock, $format = 'json', array $headers = array());
 
     public function setTimeout($timeout);
 
