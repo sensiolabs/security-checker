@@ -18,9 +18,6 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
 use SensioLabs\Security\Exception\ExceptionInterface;
-use SensioLabs\Security\Formatters\JsonFormatter;
-use SensioLabs\Security\Formatters\SimpleFormatter;
-use SensioLabs\Security\Formatters\TextFormatter;
 
 class SecurityCheckerCommand extends Command
 {
@@ -42,7 +39,7 @@ class SecurityCheckerCommand extends Command
             ->setName('security:check')
             ->setDefinition(array(
                 new InputArgument('lockfile', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
-                new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
+                new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'ansi'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
                 new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout in seconds'),
                 new InputOption('token', '', InputOption::VALUE_REQUIRED, 'The server token', ''),
@@ -85,28 +82,16 @@ EOF
         }
 
         try {
-            $vulnerabilities = $this->checker->check($input->getArgument('lockfile'));
+            $result = $this->checker->check($input->getArgument('lockfile'), $input->getOption('format'));
         } catch (ExceptionInterface $e) {
             $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($e->getMessage(), 'error', true));
 
             return 1;
         }
 
-        switch ($input->getOption('format')) {
-            case 'json':
-                $formatter = new JsonFormatter();
-                break;
-            case 'simple':
-                $formatter = new SimpleFormatter($this->getHelperSet()->get('formatter'));
-                break;
-            case 'text':
-            default:
-                $formatter = new TextFormatter($this->getHelperSet()->get('formatter'));
-        }
+        $output->writeln((string) $result);
 
-        $formatter->displayResults($output, $input->getArgument('lockfile'), $vulnerabilities);
-
-        if ($this->checker->getLastVulnerabilityCount() > 0) {
+        if (count($result) > 0) {
             return 1;
         }
     }

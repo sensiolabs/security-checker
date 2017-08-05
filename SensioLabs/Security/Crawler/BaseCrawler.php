@@ -12,13 +12,14 @@
 namespace SensioLabs\Security\Crawler;
 
 use SensioLabs\Security\Exception\RuntimeException;
+use SensioLabs\Security\Result;
 
 /**
  * @internal
  */
 abstract class BaseCrawler implements CrawlerInterface
 {
-    protected $endPoint = 'https://security.sensiolabs.org/check_lock';
+    protected $endPoint = 'https://security.symfony.com/check_lock';
     protected $timeout = 20;
     protected $headers = array();
 
@@ -54,21 +55,35 @@ abstract class BaseCrawler implements CrawlerInterface
     /**
      * {@inheritdoc}
      */
-    public function check($lock, array $headers = array())
+    public function check($lock, $format = 'json', array $headers = array())
     {
-        list($headers, $body) = $this->doCheck($lock, $headers);
+        list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
-        return array((int) $matches[1], json_decode($body, true));
+        return new Result((int) $matches[1], $body, $format);
     }
 
     /**
      * @return array An array where the first element is a headers string and second one the response body
      */
-    abstract protected function doCheck($lock);
+    abstract protected function doCheck($lock, $format = 'json');
+
+    protected function getContentType($format)
+    {
+        static $formats = array(
+            'text' => 'text/plain',
+            'simple' => 'text/plain',
+            'markdown' => 'text/markdown',
+            'yaml' => 'text/yaml',
+            'json' => 'application/json',
+            'ansi' => 'text/plain+ansi',
+        );
+
+        return isset($formats[$format]) ? $formats[$format] : 'text';
+    }
 
     protected function getLockContents($lock)
     {

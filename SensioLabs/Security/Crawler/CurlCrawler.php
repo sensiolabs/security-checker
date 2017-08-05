@@ -31,7 +31,7 @@ class CurlCrawler extends BaseCrawler
     /**
      * {@inheritdoc}
      */
-    protected function doCheck($lock, array $contextualHeaders = array())
+    protected function doCheck($lock, $format = 'json', array $contextualHeaders = array())
     {
         if (false === $curl = curl_init()) {
             throw new RuntimeException('Unable to create a cURL handle.');
@@ -41,7 +41,7 @@ class CurlCrawler extends BaseCrawler
         fwrite($handle, $this->getLockContents($lock));
         fclose($handle);
 
-        $headers = array_merge(array('Accept: application/json'), $this->headers);
+        $headers = array_merge(array('Accept: '.$this->getContentType($format)), $this->headers);
         foreach ($contextualHeaders as $key => $value) {
             $headers[] = "$key: $value";
         }

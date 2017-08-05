@@ -19,7 +19,6 @@ class SecurityChecker
 {
     const VERSION = '5.0';
 
-    private $vulnerabilityCount;
     private $crawler;
 
     public function __construct(CrawlerInterface $crawler = null)
@@ -31,14 +30,15 @@ class SecurityChecker
      * Checks a composer.lock file.
      *
      * @param string $lock    The path to the composer.lock file
+     * @param string $format  The format of the result
      * @param array  $headers An array of headers to add for this specific HTTP request
      *
-     * @return array An array of vulnerabilities
+     * @return Result
      *
      * @throws RuntimeException When the lock file does not exist
      * @throws RuntimeException When the certificate can not be copied
      */
-    public function check($lock, array $headers = array())
+    public function check($lock, $format = 'json', array $headers = array())
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
             if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
@@ -52,14 +52,7 @@ class SecurityChecker
             }
         }
 
-        list($this->vulnerabilityCount, $vulnerabilities) = $this->crawler->check($lock, $headers);
-
-        return $vulnerabilities;
-    }
-
-    public function getLastVulnerabilityCount()
-    {
-        return $this->vulnerabilityCount;
+        return $this->crawler->check($lock, $format, $headers);
     }
 
     /**
