@@ -34,6 +34,6 @@ the checker into your own project:
         $result = $checker->check('/path/to/composer.lock', 'json');
         $alerts = json_decode((string) $result, true);
 
-[1]: http://security.sensiolabs.org/
+[1]: http://security.symfony.com/
 [2]: https://github.com/FriendsOfPHP/security-advisories
 [3]: http://get.sensiolabs.org/security-checker.phar
