@@ -99,6 +99,12 @@ EOF
                 $formatter = new TextFormatter($this->getHelperSet()->get('formatter'));
         }
 
+        if (!is_array($vulnerabilities)) {
+            $output->writeln($this->getHelperSet()->get('formatter')->formatBlock('Security Checker Server returned garbage.', 'error', true));
+
+            return 127;
+        }
+
         $formatter->displayResults($output, $input->getArgument('lockfile'), $vulnerabilities);
 
         if ($this->checker->getLastVulnerabilityCount() > 0) {
