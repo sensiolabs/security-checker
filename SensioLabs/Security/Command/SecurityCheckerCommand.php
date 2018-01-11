@@ -21,6 +21,8 @@ use SensioLabs\Security\Exception\ExceptionInterface;
 
 class SecurityCheckerCommand extends Command
 {
+    protected static $defaultName = 'security:check';
+
     private $checker;
 
     public function __construct(SecurityChecker $checker)
