@@ -24,6 +24,8 @@ use SensioLabs\Security\Formatters\TextFormatter;
 
 class SecurityCheckerCommand extends Command
 {
+    protected static $defaultName = 'security:check';
+
     private $checker;
 
     public function __construct(SecurityChecker $checker)
