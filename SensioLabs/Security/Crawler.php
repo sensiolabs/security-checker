@@ -14,7 +14,6 @@ namespace SensioLabs\Security;
 use Composer\CaBundle\CaBundle;
 use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
-use SensioLabs\Security\Result;
 
 /**
  * @internal
@@ -23,7 +22,7 @@ class Crawler
 {
     private $endPoint = 'https://security.symfony.com/check_lock';
     private $timeout = 20;
-    private $headers = array();
+    private $headers = [];
 
     public function setTimeout($timeout)
     {
@@ -57,7 +56,7 @@ class Crawler
      *
      * @return Result
      */
-    public function check($lock, $format = 'json', array $headers = array())
+    public function check($lock, $format = 'json', array $headers = [])
     {
         list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
@@ -71,7 +70,7 @@ class Crawler
     /**
      * @return array An array where the first element is a headers string and second one the response body
      */
-    private function doCheck($lock, $format = 'json', array $contextualHeaders = array())
+    private function doCheck($lock, $format = 'json', array $contextualHeaders = [])
     {
         $boundary = '------------------------'.md5(microtime(true));
         $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: ".$this->getContentType($format);
@@ -81,8 +80,8 @@ class Crawler
         foreach ($contextualHeaders as $key => $value) {
             $headers .= "\r\n$key: $value";
         }
-        $opts = array(
-            'http' => array(
+        $opts = [
+            'http' => [
                 'method' => 'POST',
                 'header' => $headers,
                 'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"composer.lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".$this->getLockContents($lock)."\r\n--$boundary--\r\n",
@@ -91,12 +90,12 @@ class Crawler
                 'max_redirects' => 3,
                 'timeout' => $this->timeout,
                 'user_agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
-            ),
-            'ssl' => array(
+            ],
+            'ssl' => [
                 'verify_peer' => 1,
                 'verify_host' => 2,
-            ),
-        );
+            ],
+        ];
 
         $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
         if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
@@ -138,19 +137,19 @@ class Crawler
             }
         }
 
-        return array($headers, $body);
+        return [$headers, $body];
     }
 
     private function getContentType($format)
     {
-        static $formats = array(
+        static $formats = [
             'text' => 'text/plain',
             'simple' => 'text/plain',
             'markdown' => 'text/markdown',
             'yaml' => 'text/yaml',
             'json' => 'application/json',
             'ansi' => 'text/plain+ansi',
-        );
+        ];
 
         return isset($formats[$format]) ? $formats[$format] : 'text';
     }
@@ -159,16 +158,16 @@ class Crawler
     {
         $contents = json_decode(file_get_contents($lock), true);
         $hash = isset($contents['content-hash']) ? $contents['content-hash'] : (isset($contents['hash']) ? $contents['hash'] : '');
-        $packages = array('content-hash' => $hash, 'packages' => array(), 'packages-dev' => array());
-        foreach (array('packages', 'packages-dev') as $key) {
+        $packages = ['content-hash' => $hash, 'packages' => [], 'packages-dev' => []];
+        foreach (['packages', 'packages-dev'] as $key) {
             if (!is_array($contents[$key])) {
                 continue;
             }
             foreach ($contents[$key] as $package) {
-                $data = array(
+                $data = [
                     'name' => $package['name'],
                     'version' => $package['version'],
-                );
+                ];
                 if (isset($package['time']) && false !== strpos($package['version'], 'dev')) {
                     $data['time'] = $package['time'];
                 }

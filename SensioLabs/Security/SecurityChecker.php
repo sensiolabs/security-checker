@@ -12,7 +12,6 @@
 namespace SensioLabs\Security;
 
 use SensioLabs\Security\Exception\RuntimeException;
-use SensioLabs\Security\Crawler;
 
 class SecurityChecker
 {
@@ -37,7 +36,7 @@ class SecurityChecker
      * @throws RuntimeException When the lock file does not exist
      * @throws RuntimeException When the certificate can not be copied
      */
-    public function check($lock, $format = 'json', array $headers = array())
+    public function check($lock, $format = 'json', array $headers = [])
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
             if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
