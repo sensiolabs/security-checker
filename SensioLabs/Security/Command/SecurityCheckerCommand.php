@@ -39,13 +39,13 @@ class SecurityCheckerCommand extends Command
     {
         $this
             ->setName('security:check')
-            ->setDefinition(array(
+            ->setDefinition([
                 new InputArgument('lockfile', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'ansi'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
                 new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout in seconds'),
                 new InputOption('token', '', InputOption::VALUE_REQUIRED, 'The server token', ''),
-            ))
+            ])
             ->setDescription('Checks security issues in your project dependencies')
             ->setHelp(<<<EOF
 The <info>%command.name%</info> command looks for security issues in the

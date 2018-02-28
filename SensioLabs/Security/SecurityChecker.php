@@ -12,8 +12,6 @@
 namespace SensioLabs\Security;
 
 use SensioLabs\Security\Exception\RuntimeException;
-use SensioLabs\Security\Crawler\CrawlerInterface;
-use SensioLabs\Security\Crawler\DefaultCrawler;
 
 class SecurityChecker
 {
@@ -21,9 +19,9 @@ class SecurityChecker
 
     private $crawler;
 
-    public function __construct(CrawlerInterface $crawler = null)
+    public function __construct(Crawler $crawler)
     {
-        $this->crawler = null === $crawler ? new DefaultCrawler() : $crawler;
+        $this->crawler = $crawler;
     }
 
     /**
@@ -38,7 +36,7 @@ class SecurityChecker
      * @throws RuntimeException When the lock file does not exist
      * @throws RuntimeException When the certificate can not be copied
      */
-    public function check($lock, $format = 'json', array $headers = array())
+    public function check($lock, $format = 'json', array $headers = [])
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
             if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
@@ -56,7 +54,9 @@ class SecurityChecker
     }
 
     /**
-     * @return CrawlerInterface
+     * @internal
+     *
+     * @return Crawler
      */
     public function getCrawler()
     {
