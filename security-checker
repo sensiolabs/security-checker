@@ -26,7 +26,8 @@ if ((!$loader = includeIfExists(__DIR__.'/vendor/autoload.php')) && (!$loader = 
 use Symfony\Component\Console\Application;
 use SensioLabs\Security\Command\SecurityCheckerCommand;
 use SensioLabs\Security\SecurityChecker;
+use SensioLabs\Security\Crawler;
 
 $console = new Application('SensioLabs Security Checker', SecurityChecker::VERSION);
-$console->add(new SecurityCheckerCommand(new SecurityChecker()));
+$console->add(new SecurityCheckerCommand(new SecurityChecker(new Crawler())));
 $console->run();

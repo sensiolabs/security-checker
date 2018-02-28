@@ -12,8 +12,7 @@
 namespace SensioLabs\Security;
 
 use SensioLabs\Security\Exception\RuntimeException;
-use SensioLabs\Security\Crawler\CrawlerInterface;
-use SensioLabs\Security\Crawler\DefaultCrawler;
+use SensioLabs\Security\Crawler;
 
 class SecurityChecker
 {
@@ -21,9 +20,9 @@ class SecurityChecker
 
     private $crawler;
 
-    public function __construct(CrawlerInterface $crawler = null)
+    public function __construct(Crawler $crawler)
     {
-        $this->crawler = null === $crawler ? new DefaultCrawler() : $crawler;
+        $this->crawler = $crawler;
     }
 
     /**
@@ -56,7 +55,9 @@ class SecurityChecker
     }
 
     /**
-     * @return CrawlerInterface
+     * @internal
+     *
+     * @return Crawler
      */
     public function getCrawler()
     {
