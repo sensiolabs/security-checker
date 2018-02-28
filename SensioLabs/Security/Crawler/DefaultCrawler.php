@@ -20,7 +20,7 @@ class DefaultCrawler implements CrawlerInterface
 
     public function __construct()
     {
-        $this->crawler = function_exists('curl_init') ? new CurlCrawler() : new FileGetContentsCrawler();
+        $this->crawler = ('stream' === getenv('SENSIOLABS_SECURITY_CHECKER_TRANSPORT') || !function_exists('curl_init')) ? new FileGetContentsCrawler() : new CurlCrawler();
     }
 
     /**
