@@ -16,6 +16,10 @@ Use the code from the repository directly:
 
     $ composer install
     $ php security-checker security:check /path/to/composer.lock
+    
+Use docker image:
+
+    $ docker run -v `pwd`:/app tico/security-check security:check composer.lock
 
 Integration
 -----------
