@@ -19,7 +19,7 @@ Use the code from the repository directly:
     
 Use docker image:
 
-    $ docker run -v `pwd`:/app tico/security-check security:check composer.lock
+    $ docker run -v `pwd`:/app tico/security-checker security:check composer.lock
 
 Integration
 -----------
