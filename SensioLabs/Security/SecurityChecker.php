@@ -45,9 +45,11 @@ class SecurityChecker
             $lock = str_replace('composer.json', 'composer.lock', $lock);
         }
 
-        if (!is_file($lock)) {
+        if (!is_file($lock) && $lock != "-") {
             throw new RuntimeException('Lock file does not exist.');
         }
+
+        if ($lock == "-") $lock = "php://stdin";
 
         list($this->vulnerabilityCount, $vulnerabilities) = $this->crawler->check($lock);
 
