@@ -45,11 +45,11 @@ class SecurityChecker
             $lock = str_replace('composer.json', 'composer.lock', $lock);
         }
 
-        if (!is_file($lock) && '-' != $lock) {
+        if (!is_file($lock) && '-' !== $lock) {
             throw new RuntimeException('Lock file does not exist.');
         }
 
-        if ('-' == $lock) {
+        if ('-' === $lock) {
             $lock = 'php://stdin';
         }
 
