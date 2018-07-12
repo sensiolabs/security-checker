@@ -19,9 +19,9 @@ class SecurityChecker
 
     private $crawler;
 
-    public function __construct(Crawler $crawler)
+    public function __construct(Crawler $crawler = null)
     {
-        $this->crawler = $crawler;
+        $this->crawler = null === $crawler ? new Crawler() : $crawler;
     }
 
     /**
