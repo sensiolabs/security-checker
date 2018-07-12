@@ -1,0 +1,35 @@
+---------------------------------------------------------------------------
+
+by fabpot at 2018-07-12T06:23:16Z
+
+What is the use case for that change?
+
+---------------------------------------------------------------------------
+
+by fabpot at 2018-07-12T06:55:52Z
+
+I can see that this is related to symfony/recipes#435
+
+---------------------------------------------------------------------------
+
+by maxhelias at 2018-07-12T07:17:18Z
+
+Yes, I have my Symfony Console that is broken.
+And for the corrected we can either add the Crawler as a service in the Symfony project or apply this fix which I think will cover more cases (excluding Symfony)
+
+Error :
+```
+Too few arguments to function SensioLabs\Security\SecurityChecker::__construct(), 0 passed in /Users/mhe/www/perso/my-api/var/cache/dev/ContainerYAbmEjX/getSecurityCheckerCommandService.php on line 13 and exactly 1 expected
+```
+
+---------------------------------------------------------------------------
+
+by xabbuh at 2018-07-12T12:58:50Z
+
+IMO this change does look reasonable. There is just one `Crawler` right now which isn't even configurable. So manual injection would basically be the same. Also it is inline with how the current code for 4.1 looks like.
+
+---------------------------------------------------------------------------
+
+by fabpot at 2018-07-12T13:17:50Z
+
+As a side note, you should use the 4.1 branch. The master branch is not released yet.
