@@ -14,7 +14,7 @@
     },
     "bin": ["security-checker"],
     "autoload": {
-        "psr-0": { "SensioLabs\\Security": "" }
+        "psr-4": { "SensioLabs\\": "SensioLabs/" }
     },
     "extra": {
         "branch-alias": {
