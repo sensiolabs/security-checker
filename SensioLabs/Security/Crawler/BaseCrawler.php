@@ -20,6 +20,7 @@ abstract class BaseCrawler implements CrawlerInterface
 {
     protected $endPoint = 'https://security.sensiolabs.org/check_lock';
     protected $timeout = 20;
+    protected $excludedCVEs = array();
 
     /**
      * {@inheritdoc}
@@ -35,6 +36,14 @@ abstract class BaseCrawler implements CrawlerInterface
     public function setEndPoint($endPoint)
     {
         $this->endPoint = $endPoint;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExcludedCVEs(array $cves)
+    {
+        $this->excludedCVEs = $cves;
     }
 
     /**
@@ -58,7 +67,10 @@ abstract class BaseCrawler implements CrawlerInterface
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
-        return array((int) $matches[1], json_decode($body, true));
+        $vulnerabilityCount = (int) $matches[1];
+        $vulnerabilities = json_decode($body, true);
+
+        return $this->filterOutExcludedCVEs($vulnerabilityCount, $vulnerabilities);
     }
 
     /**
@@ -102,5 +114,26 @@ abstract class BaseCrawler implements CrawlerInterface
         }
 
         return $tmpFile;
+    }
+
+    private function filterOutExcludedCVEs($vulnerabilityCount, $vulnerabilities)
+    {
+        foreach ($vulnerabilities as $package => $overview) {
+            foreach ($overview['advisories'] as $yaml => $advisory) {
+                if (in_array($advisory['cve'], $this->excludedCVEs)) {
+                    unset($vulnerabilities[$package]['advisories'][$yaml]);
+                    $vulnerabilityCount--;
+                }
+            }
+        }
+
+        // Account for packages for which we excluded all related CVEs.
+        foreach ($vulnerabilities as $package => $overview) {
+            if (empty($overview['advisories'])) {
+                unset($vulnerabilities[$package]);
+            }
+        }
+
+        return array($vulnerabilityCount, $vulnerabilities);
     }
 }

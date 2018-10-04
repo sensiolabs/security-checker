@@ -46,4 +46,12 @@ class DefaultCrawler implements CrawlerInterface
     {
         $this->crawler->setEndPoint($endPoint);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setExcludedCVEs(array $cves)
+    {
+        $this->crawler->setExcludedCVEs($cves);
+    }
 }

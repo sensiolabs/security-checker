@@ -28,4 +28,11 @@ interface CrawlerInterface
     public function setTimeout($timeout);
 
     public function setEndPoint($endPoint);
+
+    /**
+     * Specifies a list of CVEs which will not be reported.
+     *
+     * @param string[] $cves
+     */
+    public function setExcludedCVEs(array $cves);
 }

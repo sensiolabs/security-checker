@@ -47,6 +47,12 @@ class SecurityCheckerCommand extends Command
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'text'),
                 new InputOption('end-point', '', InputOption::VALUE_REQUIRED, 'The security checker server URL'),
                 new InputOption('timeout', '', InputOption::VALUE_REQUIRED, 'The HTTP timeout in seconds'),
+                new InputOption(
+                    'excluded-cves',
+                    '',
+                    InputOption::VALUE_REQUIRED,
+                    'A list of CVEs which will not be reported (separate CVEs with a comma)'
+                )
             ))
             ->setDescription('Checks security issues in your project dependencies')
             ->setHelp(<<<EOF
@@ -79,6 +85,11 @@ EOF
 
         if ($timeout = $input->getOption('timeout')) {
             $this->checker->getCrawler()->setTimeout($timeout);
+        }
+
+        if ($excludedCVEs = $input->getOption('excluded-cves')) {
+            $excludedCVEs = explode(',', $excludedCVEs);
+            $this->checker->getCrawler()->setExcludedCVEs($excludedCVEs);
         }
 
         try {
