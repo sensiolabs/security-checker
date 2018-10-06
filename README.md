@@ -3,7 +3,7 @@ SensioLabs Security Checker
 
 The SensioLabs Security Checker is a command line tool that checks if your
 application uses dependencies with known security vulnerabilities. It uses the
-[SensioLabs Security Check Web service][1] and the [Security Advisories Database][2].
+[Security Check Web service][1] and the [Security Advisories Database][2].
 
 Usage
 -----
