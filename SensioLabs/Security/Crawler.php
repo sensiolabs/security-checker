@@ -121,9 +121,12 @@ class Crawler
 
         $statusCode = $match[1];
         if (400 == $statusCode) {
-            $data = json_decode($body, true);
+            $data = trim($body);
+            if ('json' === $format) {
+                $data = json_decode($body, true)['error'];
+            }
 
-            throw new RuntimeException($data['error']);
+            throw new RuntimeException($data);
         }
 
         if (200 != $statusCode) {
