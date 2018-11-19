@@ -11,17 +11,20 @@
 
 namespace SensioLabs\Security;
 
-class Result implements \Countable
+use SensioLabs\Security\Interfaces\Result as ResultInterface;
+
+class Result implements \Countable, ResultInterface
 {
     private $count;
     private $vulnerabilities;
     private $format;
 
-    public function __construct($count, $vulnerabilities, $format)
+    public function fill($count, $vulnerabilities, $format)
     {
         $this->count = $count;
         $this->vulnerabilities = $vulnerabilities;
         $this->format = $format;
+        return $this;
     }
 
     public function getFormat()

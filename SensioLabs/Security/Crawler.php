@@ -14,6 +14,7 @@ namespace SensioLabs\Security;
 use Composer\CaBundle\CaBundle;
 use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
+use SensioLabs\Security\Interfaces\Result as ResultInterface;
 
 /**
  * @internal
@@ -23,6 +24,13 @@ class Crawler
     private $endPoint = 'https://security.symfony.com/check_lock';
     private $timeout = 20;
     private $headers = [];
+    private $result;
+
+    public function __construct(ResultInterface $result = null)
+    {
+        $resultObject = null === $result ? new Result() : $result;
+        $this->result = $resultObject;
+    }
 
     public function setTimeout($timeout)
     {
@@ -54,20 +62,23 @@ class Crawler
      * @param string $format  The format of the result
      * @param array  $headers An array of headers to add for this specific HTTP request
      *
-     * @return Result
+     * @return ResultInterface
      */
     public function check($lock, $format = 'json', array $headers = [])
     {
         list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
-        if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
+        if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 === count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
-        return new Result((int) $matches[1], $body, $format);
+        return $this->result->fill((int) $matches[1], $body, $format);
     }
 
     /**
+     * @param $lock
+     * @param string $format
+     * @param array $contextualHeaders
      * @return array An array where the first element is a headers string and second one the response body
      */
     private function doCheck($lock, $format = 'json', array $contextualHeaders = [])

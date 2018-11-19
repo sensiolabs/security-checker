@@ -12,6 +12,7 @@
 namespace SensioLabs\Security;
 
 use SensioLabs\Security\Exception\RuntimeException;
+use SensioLabs\Security\Interfaces\Result as ResultInterface;
 
 class SecurityChecker
 {
@@ -19,9 +20,9 @@ class SecurityChecker
 
     private $crawler;
 
-    public function __construct(Crawler $crawler = null)
+    public function __construct(Crawler $crawler = null, ResultInterface $result = null)
     {
-        $this->crawler = null === $crawler ? new Crawler() : $crawler;
+        $this->crawler = null === $crawler ? new Crawler($result) : $crawler;
     }
 
     /**
@@ -31,7 +32,7 @@ class SecurityChecker
      * @param string $format  The format of the result
      * @param array  $headers An array of headers to add for this specific HTTP request
      *
-     * @return Result
+     * @return ResultInterface
      *
      * @throws RuntimeException When the lock file does not exist
      * @throws RuntimeException When the certificate can not be copied
@@ -40,7 +41,7 @@ class SecurityChecker
     {
         if (0 !== strpos($lock, 'data://text/plain;base64,')) {
             if (is_dir($lock) && file_exists($lock.'/composer.lock')) {
-                $lock = $lock.'/composer.lock';
+                $lock .= '/composer.lock';
             } elseif (preg_match('/composer\.json$/', $lock)) {
                 $lock = str_replace('composer.json', 'composer.lock', $lock);
             }

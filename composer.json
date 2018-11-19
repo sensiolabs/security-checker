@@ -10,6 +10,7 @@
     ],
     "require": {
         "php": ">=5.5.9",
+        "ext-json": "*",
         "symfony/console": "~2.7|~3.0|~4.0",
         "composer/ca-bundle": "^1.0"
     },

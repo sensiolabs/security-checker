@@ -33,6 +33,17 @@ the checker into your own project:
         $checker = new SecurityChecker();
         $result = $checker->check('/path/to/composer.lock', 'json');
         $alerts = json_decode((string) $result, true);
+        
+ * using this last method, you can also pass on any Result parser that implements the Result interface:
+
+        use SensioLabs\Security\SecurityChecker;
+        use SensioLabs\Security\Result;
+
+        // Class passed on as the second argument here will be the one that collects all results
+        $checker = new SecurityChecker(null, new Result());
+        $result = $checker->check('/path/to/composer.lock', 'json');
+        $alerts = json_decode((string) $result, true);
+         
 
 [1]: https://security.symfony.com/
 [2]: https://github.com/FriendsOfPHP/security-advisories
