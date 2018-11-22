@@ -66,6 +66,11 @@ class Crawler
      */
     public function check($lock, $format = 'json', array $headers = [])
     {
+        // Be able to force another pre-set format, determined by the object itself
+        if ($this->result->getFormat() !== null) {
+            $format = $this->result->getFormat();
+        }
+
         list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
         if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 === count($matches))) {

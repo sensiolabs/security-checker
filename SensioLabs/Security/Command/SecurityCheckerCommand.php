@@ -57,8 +57,8 @@ You can also pass the path to a <info>composer.lock</info> file as an argument:
 
 <info>php %command.full_name% /path/to/composer.lock</info>
 
-By default, the command displays the result in plain text, but you can also
-configure it to output JSON instead by using the <info>--format</info> option:
+By default, the command displays the result in ansi formatted text, but you can
+also configure it to output JSON instead by using the <info>--format</info> option:
 
 <info>php %command.full_name% /path/to/composer.lock --format=json</info>
 EOF
@@ -68,6 +68,9 @@ EOF
     /**
      * @see Command
      * @see SecurityChecker
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return int
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {

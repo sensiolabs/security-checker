@@ -8,28 +8,46 @@ namespace SensioLabs\Security\Interfaces;
  * Interface Result
  * @package SensioLabs\Security\Interfaces
  */
-interface Result {
+interface Result extends \Countable {
     /**
      * Fills in the data
      *
-     * @param $count
-     * @param $vulnerabilities
-     * @param $format
-     * @return mixed
+     * @param int $count
+     * @param string $vulnerabilities
+     * @param string $format
+     * @return self
      */
     public function fill($count, $vulnerabilities, $format);
 
     /**
-     * Which format was passed on
+     * Which format was passed on or does this class use
      *
-     * @return mixed
+     * If set manually, choose one of:
+     *   text
+     *   simple
+     *   markdown
+     *   yaml
+     *   json
+     *   ansi
+     *
+     * @see \SensioLabs\Security\Crawler::getContentType
+     *
+     *
+     * @return string
      */
     public function getFormat();
 
     /**
      * How many security vulnerabilities were found
      *
-     * @return mixed
+     * @return int
      */
     public function count();
+
+    /**
+     * What to print when casting this object to a string
+     *
+     * @return string
+     */
+    public function __toString();
 }

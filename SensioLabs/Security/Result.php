@@ -13,7 +13,13 @@ namespace SensioLabs\Security;
 
 use SensioLabs\Security\Interfaces\Result as ResultInterface;
 
-class Result implements \Countable, ResultInterface
+/**
+ * Catch-all class that is able to deal with all type of formats in one go
+ *
+ * Class Result
+ * @package SensioLabs\Security
+ */
+class Result implements ResultInterface
 {
     private $count;
     private $vulnerabilities;

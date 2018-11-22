@@ -18,6 +18,9 @@ class SecurityChecker
 {
     const VERSION = '5.0';
 
+    /**
+     * @var Crawler
+     */
     private $crawler;
 
     public function __construct(Crawler $crawler = null, ResultInterface $result = null)
