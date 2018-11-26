@@ -23,6 +23,8 @@ Integration
 The checker uses the Symfony Console component; so, you can easily integrate
 the checker into your own project:
 
+ * by requiring it with Composer: `composer require ensiolabs/security-checker --dev`: https://symfony.com/doc/current/setup.html#checking-for-security-vulnerabilities
+ 
  * by using the `SecurityCheckerCommand` class into your Symfony Console
    application;
 
