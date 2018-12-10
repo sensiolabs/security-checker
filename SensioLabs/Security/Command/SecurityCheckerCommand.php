@@ -83,8 +83,13 @@ EOF
             $this->checker->getCrawler()->setToken($token);
         }
 
+        $format = $input->getOption('format');
+        if ($input->getOption("no-ansi") && 'ansi' === $format) {
+            $format = 'text';
+        }
+
         try {
-            $result = $this->checker->check($input->getArgument('lockfile'), $input->getOption('format'));
+            $result = $this->checker->check($input->getArgument('lockfile'), $format);
         } catch (ExceptionInterface $e) {
             $output->writeln($this->getHelperSet()->get('formatter')->formatBlock($e->getMessage(), 'error', true));
 
