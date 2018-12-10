@@ -80,8 +80,13 @@ class Crawler
         foreach ($contextualHeaders as $key => $value) {
             $headers .= "\r\n$key: $value";
         }
+        
+        $proxy = str_replace(['http', 'https'], 'tcp', getenv('HTTPS_PROXY'));
+        if (!$proxy) $proxy = str_replace(['http', 'https'], 'tcp', getenv('HTTP_PROXY'));
+        
         $opts = [
             'http' => [
+                'proxy' => $proxy,
                 'method' => 'POST',
                 'header' => $headers,
                 'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"composer.lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".$this->getLockContents($lock)."\r\n--$boundary--\r\n",
