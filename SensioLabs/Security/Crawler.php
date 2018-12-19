@@ -60,7 +60,7 @@ class Crawler
     {
         list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
-        if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
+        if (!(preg_match('/X-Alerts: (\d+)/i', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
@@ -135,7 +135,7 @@ class Crawler
 
         $headers = '';
         foreach ($http_response_header as $header) {
-            if (false !== strpos($header, 'X-Alerts: ')) {
+            if (false !== stripos($header, 'X-Alerts: ')) {
                 $headers = $header;
             }
         }
