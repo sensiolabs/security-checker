@@ -54,7 +54,7 @@ abstract class BaseCrawler implements CrawlerInterface
             throw $e;
         }
 
-        if (!(preg_match('/X-Alerts: (\d+)/', $headers, $matches) || 2 == count($matches))) {
+        if (!(preg_match('/X-Alerts: (\d+)/i', $headers, $matches) || 2 == count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 

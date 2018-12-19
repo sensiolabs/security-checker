@@ -79,7 +79,7 @@ class FileGetContentsCrawler extends BaseCrawler
 
         $headers = '';
         foreach ($http_response_header as $header) {
-            if (false !== strpos($header, 'X-Alerts: ')) {
+            if (false !== stripos($header, 'X-Alerts: ')) {
                 $headers = $header;
             }
         }
