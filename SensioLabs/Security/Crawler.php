@@ -98,7 +98,7 @@ class Crawler
         ];
 
         # add support for the proxy check
-        if ($proxy = getenv('HTTP_PROXY')) {
+        if ($proxy = getenv('HTTPS_PROXY')) {
             $opts['http']['proxy'] = preg_replace("/^(https|http)/i", "tcp", $proxy);;
         }
 
