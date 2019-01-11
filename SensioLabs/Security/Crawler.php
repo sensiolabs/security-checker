@@ -97,6 +97,11 @@ class Crawler
             ],
         ];
 
+        # add support for the proxy check
+        if ($proxy = getenv('HTTP_PROXY')) {
+            $opts['http']['proxy'] = preg_replace("/^(https|http)/i", "tcp", $proxy);;
+        }
+
         $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
         if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
             $opts['ssl']['capath'] = $caPathOrFile;
