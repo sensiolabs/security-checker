@@ -11,7 +11,7 @@ calls to the security.symfony.com API):
 
     $ symfony security:check
 
-*Note: Previous versions of security-checker used: `security.sensiolabs.org`. That domain is no longer available for use and has been replaced by `security.symphony.com`. Please upgrade to version 5 of this library to fix errors with the old domain.
+*Note: Previous versions of security-checker used: `security.sensiolabs.org`. That domain is no longer available for use and has been replaced by `security.symfony.com`. Please upgrade to version 5 of this library to fix errors with the old domain.
 See: https://github.com/sensiolabs/security-checker/issues/149*
 
 Usage
