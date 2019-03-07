@@ -11,13 +11,13 @@
 
 namespace SensioLabs\Security\Command;
 
+use SensioLabs\Security\Exception\ExceptionInterface;
 use SensioLabs\Security\SecurityChecker;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
-use SensioLabs\Security\Exception\ExceptionInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 
 class SecurityCheckerCommand extends Command
 {
@@ -84,7 +84,7 @@ EOF
         }
 
         $format = $input->getOption('format');
-        if ($input->getOption("no-ansi") && 'ansi' === $format) {
+        if ($input->getOption('no-ansi') && 'ansi' === $format) {
             $format = 'text';
         }
 
@@ -98,7 +98,7 @@ EOF
 
         $output->writeln((string) $result);
 
-        if (count($result) > 0) {
+        if (\count($result) > 0) {
             return 1;
         }
     }

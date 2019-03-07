@@ -60,7 +60,7 @@ class Crawler
     {
         list($headers, $body) = $this->doCheck($lock, $format, $headers);
 
-        if (!(preg_match('/X-Alerts: (\d+)/i', $headers, $matches) || 2 == count($matches))) {
+        if (!(preg_match('/X-Alerts: (\d+)/i', $headers, $matches) || 2 == \count($matches))) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
@@ -163,7 +163,7 @@ class Crawler
         $hash = isset($contents['content-hash']) ? $contents['content-hash'] : (isset($contents['hash']) ? $contents['hash'] : '');
         $packages = ['content-hash' => $hash, 'packages' => [], 'packages-dev' => []];
         foreach (['packages', 'packages-dev'] as $key) {
-            if (!is_array($contents[$key])) {
+            if (!\is_array($contents[$key])) {
                 continue;
             }
             foreach ($contents[$key] as $package) {
