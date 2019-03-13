@@ -30,7 +30,7 @@ Use the code from the repository directly:
 
 For help on the available options
 
-    $ php security-checker --help
+    $ php security-checker security:check --help
 
 Integration
 -----------
