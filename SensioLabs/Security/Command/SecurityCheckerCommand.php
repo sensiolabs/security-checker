@@ -38,7 +38,7 @@ class SecurityCheckerCommand extends Command
     protected function configure()
     {
         $this
-            ->setName('security:check')
+            ->setName(self::$defaultName)
             ->setDefinition([
                 new InputArgument('lockfile', InputArgument::OPTIONAL, 'The path to the composer.lock file', 'composer.lock'),
                 new InputOption('format', '', InputOption::VALUE_REQUIRED, 'The output format', 'ansi'),
@@ -56,6 +56,10 @@ project dependencies:
 You can also pass the path to a <info>composer.lock</info> file as an argument:
 
 <info>php %command.full_name% /path/to/composer.lock</info>
+
+Or redirect the composer lock file content to <info>stdin</info>:
+
+<info>cat @content-of-composer.lock | php %command.full_name% -- -</info>
 
 By default, the command displays the result in plain text, but you can also
 configure it to output JSON instead by using the <info>--format</info> option:

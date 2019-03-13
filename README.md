@@ -18,10 +18,19 @@ Download the [security-checker.phar][4] file:
 
     $ php security-checker.phar security:check /path/to/composer.lock
 
+Or if you prefer to pass the `composer.lock` file from standard input, use:
+
+    $ php security-checker.phar security:check [--] -
+
 Use the code from the repository directly:
 
     $ composer install
     $ php security-checker security:check /path/to/composer.lock
+    $ php security-checker security:check -
+
+For help on the available options
+
+    $ php security-checker --help
 
 Integration
 -----------
