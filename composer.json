@@ -9,16 +9,17 @@
         }
     ],
     "require": {
+        "php": ">=5.5.9",
         "symfony/console": "~2.7|~3.0|~4.0",
         "composer/ca-bundle": "^1.0"
     },
     "bin": ["security-checker"],
     "autoload": {
-        "psr-0": { "SensioLabs\\Security": "" }
+        "psr-4": { "SensioLabs\\Security\\": "SensioLabs/Security" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "4.1-dev"
+            "dev-master": "5.0-dev"
         }
     }
 }
