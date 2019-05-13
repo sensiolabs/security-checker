@@ -29,5 +29,7 @@ use SensioLabs\Security\SecurityChecker;
 use SensioLabs\Security\Crawler;
 
 $console = new Application('SensioLabs Security Checker', SecurityChecker::VERSION);
-$console->add(new SecurityCheckerCommand(new SecurityChecker(new Crawler())));
+$command = new SecurityCheckerCommand(new SecurityChecker(new Crawler()));
+$console->add($command);
+$console->setDefaultCommand($command->getName());
 $console->run();
