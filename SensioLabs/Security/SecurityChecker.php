@@ -15,7 +15,7 @@ use SensioLabs\Security\Exception\RuntimeException;
 
 class SecurityChecker
 {
-    const VERSION = '5.0';
+    const VERSION = '6.0';
 
     private $crawler;
 

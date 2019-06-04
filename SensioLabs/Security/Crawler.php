@@ -11,9 +11,12 @@
 
 namespace SensioLabs\Security;
 
-use Composer\CaBundle\CaBundle;
 use SensioLabs\Security\Exception\HttpException;
 use SensioLabs\Security\Exception\RuntimeException;
+use Symfony\Component\HttpClient\HttpClient;
+use Symfony\Component\Mime\Part\DataPart;
+use Symfony\Component\Mime\Part\Multipart\FormDataPart;
+use Symfony\Contracts\HttpClient\ResponseInterface;
 
 /**
  * @internal
@@ -58,89 +61,50 @@ class Crawler
      */
     public function check($lock, $format = 'json', array $headers = [])
     {
-        list($headers, $body) = $this->doCheck($lock, $format, $headers);
+        $response = $this->doCheck($lock, $format, $headers);
 
-        if (!(preg_match('/X-Alerts: (\d+)/i', $headers, $matches) || 2 == \count($matches))) {
+        $headers = $response->getHeaders();
+        if (!isset($headers['x-alerts']) || !ctype_digit($count = $headers['x-alerts'][0])) {
             throw new RuntimeException('The web service did not return alerts count.');
         }
 
-        return new Result((int) $matches[1], $body, $format);
+        return new Result((int) $count, $response->getContent(), $format);
     }
 
     /**
      * @return array An array where the first element is a headers string and second one the response body
      */
-    private function doCheck($lock, $format = 'json', array $contextualHeaders = [])
+    private function doCheck($lock, $format = 'json', array $contextualHeaders = []): ResponseInterface
     {
-        $boundary = '------------------------'.md5(microtime(true));
-        $headers = "Content-Type: multipart/form-data; boundary=$boundary\r\nAccept: ".$this->getContentType($format);
-        foreach ($this->headers as $header) {
-            $headers .= "\r\n$header";
-        }
-        foreach ($contextualHeaders as $key => $value) {
-            $headers .= "\r\n$key: $value";
-        }
-        $opts = [
-            'http' => [
-                'method' => 'POST',
-                'header' => $headers,
-                'content' => "--$boundary\r\nContent-Disposition: form-data; name=\"lock\"; filename=\"composer.lock\"\r\nContent-Type: application/octet-stream\r\n\r\n".$this->getLockContents($lock)."\r\n--$boundary--\r\n",
-                'ignore_errors' => true,
-                'follow_location' => true,
-                'max_redirects' => 3,
-                'timeout' => $this->timeout,
-                'user_agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
-            ],
-            'ssl' => [
-                'verify_peer' => 1,
-                'verify_host' => 2,
-            ],
-        ];
+        $client = HttpClient::create();
+        $body = new FormDataPart([
+            'lock' => new DataPart($this->getLockContents($lock), 'composer.lock'),
+        ]);
+        $headers = array_merge($this->headers, [
+            'Accept' => $this->getContentType($format),
+            'User-Agent' => sprintf('SecurityChecker-CLI/%s FGC PHP', SecurityChecker::VERSION),
+        ], $body->getPreparedHeaders()->toArray());
 
-        $caPathOrFile = CaBundle::getSystemCaRootBundlePath();
-        if (is_dir($caPathOrFile) || (is_link($caPathOrFile) && is_dir(readlink($caPathOrFile)))) {
-            $opts['ssl']['capath'] = $caPathOrFile;
-        } else {
-            $opts['ssl']['cafile'] = $caPathOrFile;
-        }
+        $response = $client->request('POST', $this->endPoint, [
+            'headers' => $headers,
+            'timeout' => $this->timeout,
+            'body' => $body->bodyToIterable(),
+        ]);
 
-        $context = stream_context_create($opts);
-        $level = error_reporting(0);
-        $body = file_get_contents($this->endPoint, 0, $context);
-        error_reporting($level);
-        if (false === $body) {
-            $error = error_get_last();
-
-            throw new RuntimeException(sprintf('An error occurred: %s.', $error['message']));
-        }
-
-        // status code
-        if (!preg_match('{HTTP/\d\.\d (\d+) }i', $http_response_header[0], $match)) {
-            throw new RuntimeException('An unknown error occurred.');
-        }
-
-        $statusCode = $match[1];
-        if (400 == $statusCode) {
-            $data = trim($body);
+        if (400 === $statusCode = $response->getStatusCode()) {
+            $data = trim($response->getContent(false));
             if ('json' === $format) {
-                $data = json_decode($body, true)['error'];
+                $data = json_decode($data, true)['message'] ?? $data;
             }
 
-            throw new RuntimeException($data);
+            throw new HttpException(sprintf('%s (HTTP %s).', $data, $statusCode), $statusCode);
         }
 
-        if (200 != $statusCode) {
+        if (200 !== $statusCode) {
             throw new HttpException(sprintf('The web service failed for an unknown reason (HTTP %s).', $statusCode), $statusCode);
         }
 
-        $headers = '';
-        foreach ($http_response_header as $header) {
-            if (false !== stripos($header, 'X-Alerts: ')) {
-                $headers = $header;
-            }
-        }
-
-        return [$headers, $body];
+        return $response;
     }
 
     private function getContentType($format)
