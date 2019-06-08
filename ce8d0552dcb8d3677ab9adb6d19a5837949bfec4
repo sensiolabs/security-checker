@@ -1,0 +1,23 @@
+---------------------------------------------------------------------------
+
+by Nardberjean at 2019-06-07T12:33:38Z
+
+Thanks!
+
+---------------------------------------------------------------------------
+
+by Nardberjean at 2019-06-07T12:48:43Z
+
+I am not sure if adding or ext-ctype may help prevent conflits in some installation cases, where other packages may require ext-ctypes only and conflict with the polyfill.
+
+---------------------------------------------------------------------------
+
+by Nardberjean at 2019-06-07T13:00:18Z
+
+The polyfill is probably not loading when the extension is present and I see that symfony/skeleton and symfony/website-skeleton are replacing the polyfill so conflicts seems to be avoided.
+
+---------------------------------------------------------------------------
+
+by Nardberjean at 2019-06-07T13:15:51Z
+
+Looks like if adding the "or" would make it more readable for slow humans like me.
