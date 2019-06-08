@@ -12,7 +12,8 @@
         "php": ">=7.1.3",
         "symfony/console": "^2.8|^3.4|^4.2",
         "symfony/http-client": "^4.3",
-        "symfony/mime": "^4.3"
+        "symfony/mime": "^4.3",
+        "symfony/polyfill-ctype": "^1.11"
     },
     "bin": ["security-checker"],
     "autoload": {
