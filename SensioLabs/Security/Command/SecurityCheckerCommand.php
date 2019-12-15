@@ -92,6 +92,8 @@ EOF
         }
 
         $output->writeln((string) $result);
+        $dateTimeObject = new \DateTime();
+        $output->writeln('Security Checker command run at ' . $dateTimeObject->format('l F Y H:i:s e') . PHP_EOL);
 
         if (count($result) > 0) {
             return 1;
