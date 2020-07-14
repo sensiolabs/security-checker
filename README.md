@@ -11,10 +11,13 @@ calls to the security.symfony.com API):
 
     $ symfony security:check
 
+**TIP**: If you are using Github, you can use the PHP Security Checker [Github
+Action][4] to automatically check for vulnerabilities when pushing code.
+
 Usage
 -----
 
-Download the [security-checker.phar][4] file:
+Download the [security-checker.phar][5] file:
 
     $ php security-checker.phar security:check /path/to/composer.lock
 
@@ -43,4 +46,5 @@ the checker into your own project:
 [1]: https://security.symfony.com/
 [2]: https://github.com/FriendsOfPHP/security-advisories
 [3]: https://symfony.com/download
-[4]: https://get.sensiolabs.org/security-checker.phar
+[4]: https://github.com/marketplace/actions/the-php-security-checker
+[5]: https://get.sensiolabs.org/security-checker.phar
