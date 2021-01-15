@@ -1,50 +1,10 @@
 SensioLabs Security Checker
 ===========================
 
-The SensioLabs Security Checker is a command line tool that checks if your
-application uses dependencies with known security vulnerabilities. It uses the
-[Security Check Web service][1] and the [Security Advisories Database][2].
+**WARNING**: Don't use this piece of software anymore as the underlying web
+service will stop working at the end of January 2021. Instead, use the
+[Open-Source CLI tool][1] that does the same locally, or use the [Symfony
+CLI][2] tool.
 
-**TIP**: As an alternative, you can use the [Symfony CLI][3] tool that has the
-following advantages: it does not depend on PHP, all checks are done locally (no
-calls to the security.symfony.com API):
-
-    $ symfony security:check
-
-**TIP**: If you are using Github, you can use the PHP Security Checker [Github
-Action][4] to automatically check for vulnerabilities when pushing code.
-
-Usage
------
-
-Download the [security-checker.phar][5] file:
-
-    $ php security-checker.phar security:check /path/to/composer.lock
-
-Use the code from the repository directly:
-
-    $ composer install
-    $ php security-checker security:check /path/to/composer.lock
-
-Integration
------------
-
-The checker uses the Symfony Console component; so, you can easily integrate
-the checker into your own project:
-
- * by using the `SecurityCheckerCommand` class into your Symfony Console
-   application;
-
- * by using the `SecurityChecker` class directly into your own code:
-
-        use SensioLabs\Security\SecurityChecker;
-
-        $checker = new SecurityChecker();
-        $result = $checker->check('/path/to/composer.lock', 'json');
-        $alerts = json_decode((string) $result, true);
-
-[1]: https://security.symfony.com/
-[2]: https://github.com/FriendsOfPHP/security-advisories
-[3]: https://symfony.com/download
-[4]: https://github.com/marketplace/actions/the-php-security-checker
-[5]: https://get.sensiolabs.org/security-checker.phar
+[1]: https://github.com/fabpot/local-php-security-checker
+[2]: https://symfony.com/download
